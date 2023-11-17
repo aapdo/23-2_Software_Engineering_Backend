@@ -30,4 +30,16 @@ public class SignupService {
         memberRepository.save(member);
         return member;
     }
+
+    public boolean isIdDuplicate(String memberId)
+    {
+        // true  : 중복이다
+        // false : 중복 아니다, 즉 false이어야 통과
+        return memberRepository.existsByMemberId(memberId);
+    }
+
+    public boolean isNicknameDuplicate(String nickname)
+    {
+        return memberRepository.existsByNickname(nickname);
+    }
 }
