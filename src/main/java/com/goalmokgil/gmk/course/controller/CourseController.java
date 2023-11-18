@@ -13,6 +13,8 @@ public class CourseController {
 
     @GetMapping("view/course/{courseId}")
     public String viewCourse(@PathVariable int courseId) {
+        // 유저 권한 체크 먼저 필요
+        //
         return "1";
     }
 
