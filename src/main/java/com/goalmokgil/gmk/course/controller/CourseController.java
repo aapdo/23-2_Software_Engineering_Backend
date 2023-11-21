@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/course")
 public class CourseController {
 
     private final CourseService courseService;
@@ -27,13 +28,12 @@ public class CourseController {
 
 
     // member 관련 내용도 받을 거임.
-    @PostMapping("create/course")
+    @PostMapping("create")
     public boolean createNewCourse(@RequestBody Course course) {
-
         return true;
     }
 
-    @GetMapping("view/course/{courseId}")
+    @GetMapping("view/{courseId}")
     public String viewCourse(@PathVariable Long courseId) {
         // 유저 권한 체크 먼저 필요
         //return courseService.getMemberCourses(memberId)
@@ -44,7 +44,7 @@ public class CourseController {
      * Member mypage에서 자신의 모든 코스를 조회하고 싶을 때 사용
      * @return ArrayList<Course>
      */
-    @GetMapping("view/myCourse")
+    @GetMapping("myCourses")
     public String viewMyCourse() {
         // 유저 권한 체크 먼저 필요
         // courseRepository.findAllByMemberId();

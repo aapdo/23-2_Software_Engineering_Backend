@@ -76,7 +76,6 @@ class CourseRepositoryTest {
         Course savedCourse = findCourse.orElse(new Course());
 
         Assertions.assertThat(savedCourse.getCourseId()).isEqualTo(course.getCourseId());
-
     }
 
     @Test
