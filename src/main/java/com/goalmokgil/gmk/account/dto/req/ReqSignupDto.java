@@ -5,9 +5,11 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ReqSignupDto {
 
     @NotBlank(message = "ID는 필수값 입니다")

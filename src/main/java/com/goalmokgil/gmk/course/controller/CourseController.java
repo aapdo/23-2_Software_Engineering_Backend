@@ -1,5 +1,6 @@
 package com.goalmokgil.gmk.course.controller;
 
+import com.goalmokgil.gmk.config.SecurityUtil;
 import com.goalmokgil.gmk.course.CourseValidator;
 import com.goalmokgil.gmk.course.entity.Course;
 import com.goalmokgil.gmk.course.service.CourseService;
@@ -35,8 +36,9 @@ public class CourseController {
 
     @GetMapping("view/{courseId}")
     public String viewCourse(@PathVariable Long courseId) {
+        return SecurityUtil.getCurrentMemberId();
         //return courseService.getCourseByCourseId(courseId);
-        return "1";
+        //return "1";
     }
 
     /**
