@@ -35,9 +35,7 @@ public class CourseController {
 
     @GetMapping("view/{courseId}")
     public String viewCourse(@PathVariable Long courseId) {
-        // 유저 권한 체크 먼저 필요
-        //return courseService.getMemberCourses(memberId)
-        return "1";
+        return courseService.getCourseByCourseId(courseId);
     }
 
     /**
