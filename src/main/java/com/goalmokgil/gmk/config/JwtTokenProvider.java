@@ -41,7 +41,8 @@ public class JwtTokenProvider {
 
         long now = (new Date()).getTime();
         // Access Token 생성
-        Date accessTokenExpiresIn = new Date(now + 30000); // 기존 : 86400000(하루), 토큰 만료 테스트를 위해 30초로 설정했음
+        //Date accessTokenExpiresIn = new Date(now + 30000); // 기존 : 86400000(하루), 토큰 만료 테스트를 위해 30초로 설정했음
+        Date accessTokenExpiresIn = new Date(now + 86400000); // 기존 : 86400000(하루), 토큰 만료 테스트를 위해 30초로 설정했음
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
