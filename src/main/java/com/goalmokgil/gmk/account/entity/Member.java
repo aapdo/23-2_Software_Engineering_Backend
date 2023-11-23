@@ -1,6 +1,9 @@
 package com.goalmokgil.gmk.account.entity;
+import com.goalmokgil.gmk.course.entity.Course;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,4 +33,12 @@ public class Member {
         this.birth = birth;
         this.email = email;
     }
+
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Course> course;
+
+    // Post push하면 이것도 쓰면 됨
+//    @OneToMany(cascade = CascadeType.ALL)
+//    private List<Post> post;
 }
