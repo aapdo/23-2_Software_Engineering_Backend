@@ -21,8 +21,8 @@ public class CourseService   {
     private final CourseRepository courseRepository;
     private final MemberRepository memberRepository;
 
-    public ArrayList<Course> getMemberCourses(Long memberId){
-        return courseRepository.findAllByMemberId(memberId);
+    public ArrayList<Course> getMemberCourses(Long userId){
+        return courseRepository.findAllByUserId(userId);
     }
 
     // member id, course id로 해당 코스를 조회하고 리턴함.

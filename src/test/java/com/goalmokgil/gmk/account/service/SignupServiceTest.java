@@ -5,10 +5,14 @@ import com.goalmokgil.gmk.account.entity.Member;
 import com.goalmokgil.gmk.account.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,14 +62,14 @@ class SignupServiceTest {
     void testIsIdDuplicate() {
         // Given
         String memberId = "testId";
-        when(memberRepository.existsByMemberId(memberId)).thenReturn(true);
+        when(memberRepository.existsByLoginId(memberId)).thenReturn(true);
 
         // When
         boolean isDuplicate = signupService.isIdDuplicate(memberId);
 
         // Then
         assertTrue(isDuplicate);
-        verify(memberRepository, times(1)).existsByMemberId(memberId);
+        verify(memberRepository, times(1)).existsByLoginId(memberId);
     }
 
     @Test

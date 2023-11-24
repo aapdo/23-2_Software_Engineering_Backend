@@ -16,11 +16,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.assertj.core.api.Assertions;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
@@ -34,6 +31,7 @@ class CourseRepositoryTest {
     CourseRepository courseRepository;
     @Autowired
     MemberRepository memberRepository;
+    Member testMember = new Member("1", "1", "jy", "jy", "0830", "jade");
 
     @AfterEach
     void afterEach() {
@@ -43,7 +41,6 @@ class CourseRepositoryTest {
 
     @Test
     void saveCourse() throws JsonProcessingException {
-        Member testMember = new Member("1", "1", "jy", "jy", "0830", "jade");
         testMember = memberRepository.save(testMember);
 
         Place place = new Place();
@@ -70,9 +67,15 @@ class CourseRepositoryTest {
         test = objectMapper.writeValueAsString(course);
         System.out.println("test = " + test);
         //String testJson = objectMapper.writeValueAsString(course);
+        System.out.println();
         courseRepository.save(course);
+        System.out.println();
 
+        System.out.println();
         Optional<Course> findCourse = courseRepository.findById(course.getCourseId());
+        findCourse.ifPresent( course1 -> {
+            System.out.println("course1 = " + course1);
+        });
         Course savedCourse = findCourse.orElse(new Course());
 
         Assertions.assertThat(savedCourse.getCourseId()).isEqualTo(course.getCourseId());
@@ -80,21 +83,6 @@ class CourseRepositoryTest {
 
     @Test
     void findAllByMemberIdTest(){
-        /*
-        Member testMember = new Member("1", "1", "jy", "jy", "0830", "jade");
-        testMember = memberRepository.save(testMember);
-        System.out.println("testMember = " + testMember);
-        ArrayList<Course> courses = new ArrayList<>();
-        int testCase = 10;
-        for (int i = 0; i < testCase; i++) {
-            courses.add(new Course((long)i, testMember, LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now()));
-            System.out.println("courses = " + courses.get(i));
-            courseRepository.save(courses.get(i));
-        }
 
-        ArrayList<Course> result = courseRepository.findAllByMemberId(testMember.getId());
-        Assertions.assertThat(result.size() == testCase);
-
-         */
     }
 }

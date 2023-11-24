@@ -9,9 +9,10 @@ import java.util.Optional;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long>{
-    ArrayList<Course> findAllByMemberId(Long id);
+    ArrayList<Course> findAllByUserId(Long id);
 
     Optional<Course> findCourseByCourseId(Long courseId);
+
     //Optional<Course> findCourseByCourseIdAndMember(Long memberId, Long courseId);
 
 }

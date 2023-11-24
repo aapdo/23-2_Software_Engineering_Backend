@@ -32,7 +32,7 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰 생성
-    public TokenDto generateToken(Authentication authentication) {
+    public TokenDto generateToken(Authentication authentication, Long userId) {
 
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
@@ -46,6 +46,7 @@ public class JwtTokenProvider {
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
+                .claim("userId", userId)
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();

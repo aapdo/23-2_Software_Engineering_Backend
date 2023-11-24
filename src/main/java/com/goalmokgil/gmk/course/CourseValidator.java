@@ -21,9 +21,5 @@ public class CourseValidator implements Validator {
         } else {
             errors.rejectValue("target", "is not Course");
         }
-
-
-
-
     }
 }

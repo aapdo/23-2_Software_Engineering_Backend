@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import static com.goalmokgil.gmk.config.SecurityUtil.getCurrentMemberId;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -36,7 +38,7 @@ public class CourseController {
 
     @GetMapping("view/{courseId}")
     public String viewCourse(@PathVariable Long courseId) {
-        return SecurityUtil.getCurrentMemberId();
+        return getCurrentMemberId();
         //return courseService.getCourseByCourseId(courseId);
         //return "1";
     }
@@ -46,9 +48,10 @@ public class CourseController {
      * @return ArrayList<Course>
      */
     @GetMapping("myCourses")
-    public String viewMyCourse() {
+    public String viewMyCourse(@RequestHeader("Authorization") String authorizationHeader) {
         // 유저 권한 체크 먼저 필요
         // courseRepository.findAllByMemberId();
+
         courseService.getMemberCourses(1L);
         return "1";
     }

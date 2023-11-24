@@ -27,7 +27,7 @@ public class Course {
     // 연관관계의 주인(여기서는 member)은 mappedBy 속성이 없다. 주인이 아닌쪽에 주인을 지정해주는 것.
     // 연관관계의 주인이 외래키를 관리(등록 수정 삭제)를 할 수 있음.
     // 주인이 아닌 쪽은 읽기만 할 수 있다.
-    @ManyToOne(cascade = CascadeType.ALL) // @ManyToOne은 항상 연관관계의 주인이 됨. mappedBy 속성이 없음.
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) // @ManyToOne은 항상 연관관계의 주인이 됨. mappedBy 속성이 없음.
     @NotNull
     @JoinColumn(name = "userId")
     private Member member;

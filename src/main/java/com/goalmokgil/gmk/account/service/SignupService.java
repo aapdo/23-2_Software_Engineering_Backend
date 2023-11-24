@@ -20,7 +20,7 @@ public class SignupService {
 
     public Member memberSignup(ReqSignupDto reqSignupDto) {
         Member member = Member.builder()
-                .memberId(reqSignupDto.getMemberId())
+                .loginId(reqSignupDto.getLoginId())
                 .password(passwordEncoder.encode(reqSignupDto.getPassword()))
                 .name(reqSignupDto.getName())
                 .nickname(reqSignupDto.getNickname())
@@ -35,7 +35,7 @@ public class SignupService {
     {
         // true  : 중복이다
         // false : 중복 아니다, 즉 false이어야 통과
-        return memberRepository.existsByMemberId(memberId);
+        return memberRepository.existsByLoginId(memberId);
     }
 
     public boolean isNicknameDuplicate(String nickname)

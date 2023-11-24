@@ -15,4 +15,12 @@ public class SecurityUtil {
         }
         return authentication.getName();
     }
+
+    public static Long getCurrentUserId(Authentication authentication){
+        if (authentication == null || authentication.getName() == null) {
+            throw new RuntimeException("No authentication information.");
+        }
+        return authentication.getPrincipal()
+
+    }
 }

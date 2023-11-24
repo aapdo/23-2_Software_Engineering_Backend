@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class ReqSignupDto {
 
     @NotBlank(message = "ID는 필수값 입니다")
-    private String memberId;
+    private String loginId;
 
     @NotBlank(message = "비밀번호는 필수값 입니다")
     private String password;

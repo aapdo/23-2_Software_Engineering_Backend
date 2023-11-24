@@ -25,12 +25,12 @@ public class SignupController {
     }
 
     // 중복이 false이어야 통과임
-    @GetMapping("/member-id/{memberId}/duplicate")
-    public ResponseEntity<Object> checkIdDuplicate(@PathVariable String memberId) throws IOException {
-        return ResponseEntity.ok(signupService.isIdDuplicate(memberId));
+    @GetMapping("/login-id/{loginId}/duplicate")
+    public ResponseEntity<Object> checkIdDuplicate(@PathVariable String loginId) throws IOException {
+        return ResponseEntity.ok(signupService.isIdDuplicate(loginId));
     }
 
-    @GetMapping("/member-nickname/{nickname}/duplicate")
+    @GetMapping("/login-nickname/{nickname}/duplicate")
     public ResponseEntity<Object> checkNicknameDuplicate(@PathVariable String nickname) throws IOException {
         return ResponseEntity.ok(signupService.isNicknameDuplicate(nickname));
     }
