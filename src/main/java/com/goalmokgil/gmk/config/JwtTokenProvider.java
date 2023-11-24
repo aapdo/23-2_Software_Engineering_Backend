@@ -103,4 +103,10 @@ public class JwtTokenProvider {
             return e.getClaims();
         }
     }
+
+    // token의 Claims를 가져오는 메소드
+    public Claims extractClaims(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.goalmokgil.gmk.course.controller;
 
+import com.goalmokgil.gmk.account.service.TokenService;
 import com.goalmokgil.gmk.config.SecurityUtil;
 import com.goalmokgil.gmk.course.CourseValidator;
 import com.goalmokgil.gmk.course.entity.Course;
@@ -10,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import static com.goalmokgil.gmk.config.SecurityUtil.getCurrentMemberId;
-
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -20,6 +19,7 @@ public class CourseController {
 
     private final CourseService courseService;
     private final CourseValidator courseValidator;
+    private final TokenService tokenService;
 
     /*
     @InitBinder
@@ -38,7 +38,6 @@ public class CourseController {
 
     @GetMapping("view/{courseId}")
     public String viewCourse(@PathVariable Long courseId) {
-        return getCurrentMemberId();
         //return courseService.getCourseByCourseId(courseId);
         //return "1";
     }
@@ -51,7 +50,7 @@ public class CourseController {
     public String viewMyCourse(@RequestHeader("Authorization") String authorizationHeader) {
         // 유저 권한 체크 먼저 필요
         // courseRepository.findAllByMemberId();
-
+        tokenService.getCurrentUserId(authorizationHeader);
         courseService.getMemberCourses(1L);
         return "1";
     }
