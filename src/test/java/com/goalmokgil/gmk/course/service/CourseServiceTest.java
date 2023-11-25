@@ -88,7 +88,6 @@ public class CourseServiceTest {
 
         // Act
         Course result = courseService.createNewCourse(authorizationHeader, courseDto);
-
         // Assert
         assertEquals(newCourse, result);
         assertEquals(existingMember.getCourse().size(), 1); // Assuming that adding a new course updates the member's courses
