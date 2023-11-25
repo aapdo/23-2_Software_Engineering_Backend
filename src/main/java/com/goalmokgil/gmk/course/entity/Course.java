@@ -2,6 +2,7 @@ package com.goalmokgil.gmk.course.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.goalmokgil.gmk.account.entity.Member;
+import com.goalmokgil.gmk.course.dto.CourseDto;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -57,5 +58,12 @@ public class Course {
         this.courseData = courseData;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
+    }
+
+    public Course(CourseDto courseDto, Member member) {
+        this.member = member;
+        this.courseData =courseDto.getCourseData();
+        this.createdDate = courseDto.getCreatedDate();
+        this.modifiedDate = courseDto.getModifiedDate();
     }
 }

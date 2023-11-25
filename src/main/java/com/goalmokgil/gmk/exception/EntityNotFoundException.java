@@ -9,7 +9,10 @@ public class EntityNotFoundException extends ApplicationException{
         return HttpStatus.NOT_FOUND;
     }
 
-    public EntityNotFoundException(){
+    public EntityNotFoundException() {
         super("요청하신 리소스는 존재하지 않습니다");
     }
+    public EntityNotFoundException(String msg){
+            super(msg);
+        }
 }
