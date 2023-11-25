@@ -85,7 +85,6 @@ public class CourseServiceTest {
         Mockito.when(tokenService.getCurrentUserId(Mockito.any())).thenReturn(userIdFromToken);
         Mockito.when(memberRepository.findById(userIdFromToken)).thenReturn(java.util.Optional.of(existingMember));
         Mockito.when(courseRepository.save(Mockito.any(Course.class))).thenReturn(newCourse);
-
         // Act
         Course result = courseService.createNewCourse(authorizationHeader, courseDto);
 
