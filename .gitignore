@@ -20,7 +20,7 @@ gradle/wrapper/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
-
+.DS_Store
 ### IntelliJ IDEA ###
 .idea
 *.iws
