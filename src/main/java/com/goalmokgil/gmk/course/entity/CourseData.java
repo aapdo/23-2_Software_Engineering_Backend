@@ -16,6 +16,7 @@ import java.util.Map;
 public class CourseData {
     private String courseTitle;
     private List<Place> courseContent = new ArrayList<>();
+
     public void addPlace(Place place) {
         courseContent.add(place);
     }

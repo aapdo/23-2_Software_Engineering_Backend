@@ -1,6 +1,7 @@
 package com.goalmokgil.gmk.course.service;
 
 import com.goalmokgil.gmk.account.repository.MemberRepository;
+import com.goalmokgil.gmk.account.service.TokenService;
 import com.goalmokgil.gmk.course.entity.Course;
 import com.goalmokgil.gmk.course.repository.CourseRepository;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 
@@ -20,6 +22,7 @@ public class CourseService   {
 
     private final CourseRepository courseRepository;
     private final MemberRepository memberRepository;
+    private final TokenService tokenService;
 
     public ArrayList<Course> getMemberCourses(Long userId){
         return courseRepository.findAllByUserId(userId);
@@ -27,9 +30,12 @@ public class CourseService   {
 
     // member id, course id로 해당 코스를 조회하고 리턴함.
     // 없을 경우 빈 코스 템플릿을 생성하고 db에 저장 후 리턴.
-    public Course getCourseByCourseId(Long memberId, Long courseId) {
-        return new Course();
-        //return courseRepository.findCourseByCourseIdAndMember(memberId, courseId).orElse(createNewCourseTemplate(memberId, courseId));
+    public Course getCourseByCourseId(String authorizationHeader, Long courseId){
+        String token = authorizationHeader.substring(7);
+        Long userId = tokenService.getCurrentUserId(token);
+        Optional<Course> courseByCourseId = courseRepository.findCourseByCourseId(courseId);
+
+        return courseByCourseId.orElseThrow(() -> new NoSuchElementException("값이 없습니다."));
     }
 
     private Course createNewCourseTemplate(Long memberId, Long courseId) {
