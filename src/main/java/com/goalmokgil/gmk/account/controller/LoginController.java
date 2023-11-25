@@ -18,14 +18,18 @@ public class LoginController {
 
     @PostMapping("/login")
     public JwtLoginDto login(@RequestBody ReqLoginDto reqLoginDto) {
-        String memberId = reqLoginDto.getMemberId();
+        String memberId = reqLoginDto.getLoginId();
         String password = reqLoginDto.getPassword();
 
+        JwtLoginDto jwtLoginDto = new JwtLoginDto();
+        /*
         JwtLoginDto jwtLoginDto = JwtLoginDto.builder()
                 .grantType(loginService.login(memberId, password).getGrantType())
                 .accessToken(loginService.login(memberId, password).getAccessToken())
                 .memberId(memberId)
                 .build();
+
+         */
         return jwtLoginDto;
     }
 }

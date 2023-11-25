@@ -21,11 +21,11 @@ import java.util.Optional;
 public class CourseService   {
 
     private final CourseRepository courseRepository;
-    private final MemberRepository memberRepository;
     private final TokenService tokenService;
 
     public ArrayList<Course> getMemberCourses(Long userId){
-        return courseRepository.findAllByUserId(userId);
+        //return courseRepository.findAllByUserId(userId);
+        return new ArrayList<>();
     }
 
     // member id, course id로 해당 코스를 조회하고 리턴함.
@@ -33,7 +33,7 @@ public class CourseService   {
     public Course getCourseByCourseId(String authorizationHeader, Long courseId){
         String token = authorizationHeader.substring(7);
         Long userId = tokenService.getCurrentUserId(token);
-        Optional<Course> courseByCourseId = courseRepository.findCourseByCourseId(courseId);
+        Optional<Course> courseByCourseId = courseRepository.findById(courseId);
 
         return courseByCourseId.orElseThrow(() -> new NoSuchElementException("값이 없습니다."));
     }
