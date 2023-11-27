@@ -1,12 +1,14 @@
 package com.goalmokgil.gmk.course.controller;
 
-import com.goalmokgil.gmk.course.CourseValidator;
 import com.goalmokgil.gmk.course.dto.CourseDto;
 import com.goalmokgil.gmk.course.entity.Course;
 import com.goalmokgil.gmk.course.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -15,21 +17,13 @@ import org.springframework.web.bind.annotation.*;
 public class CourseController {
 
     private final CourseService courseService;
-    private final CourseValidator courseValidator;
-
-    /*
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(courseValidator);
-    }
-
-     */
 
 
     // member 관련 내용도 받을 거임.
     @PostMapping("create")
-    public boolean createNewCourse(@RequestBody CourseDto courseDto) {
-        return true;
+    public CourseDto createNewCourse(@RequestHeader("Authorization") String authorizationHeader, @RequestBody CourseDto courseDto) {
+        return new CourseDto(courseService.createNewCourse(authorizationHeader, courseDto));
+
     }
 
     @GetMapping("view/{courseId}")
@@ -42,8 +36,12 @@ public class CourseController {
      * @return ArrayList<Course>
      */
     @GetMapping("/myCourses")
-    public String viewMyCourse(@RequestHeader("Authorization") String authorizationHeader) {
-
-        return "1";
+    public List<CourseDto> viewMyCourse(@RequestHeader("Authorization") String authorizationHeader) {
+        ArrayList<CourseDto> returnList = new ArrayList<>();
+        List<Course> result = courseService.getAllCourseByMemberId(authorizationHeader);
+        for (Course course : result) {
+            returnList.add(new CourseDto(course));
+        }
+        return returnList;
     }
 }

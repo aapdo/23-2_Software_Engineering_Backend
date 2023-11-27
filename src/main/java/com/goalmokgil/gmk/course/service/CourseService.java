@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -43,7 +44,15 @@ public class CourseService   {
         }else {
             throw new ForbiddenCourseException("해당 코스를 조회할 수 있는 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
+    }
 
+    public List<Course> getAllCourseByMemberId(String authorizationHeader){
+        String token = authorizationHeader.substring(7);
+        Long userId = tokenService.getCurrentUserId(token);
+        Member member = memberRepository.findById(userId).orElseThrow(() -> {
+            return new EntityNotFoundException("잘못된 계정 정보입니다.");
+        });
+        return member.getCourse();
     }
 
     public Course createNewCourse(String authorizationHeader, CourseDto courseDto) {
@@ -59,6 +68,7 @@ public class CourseService   {
         });
         // You can use the userId or other information from the token to set properties of the new course
         Course newCourse = new Course(courseDto, member);
+        // member의 course에 add 해줌.
         member.getCourse().add(newCourse);
         memberRepository.save(member);
         courseRepository.save(newCourse);

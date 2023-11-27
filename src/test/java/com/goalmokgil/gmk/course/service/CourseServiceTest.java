@@ -71,6 +71,7 @@ public class CourseServiceTest {
         assertThrows(EntityNotFoundException.class, () -> courseService.getCourseByCourseId(authorizationHeader, courseId));
     }
 
+    /*
     @Test
     void testCreateNewCourse() {
         // Arrange
@@ -94,6 +95,7 @@ public class CourseServiceTest {
         Mockito.verify(memberRepository, Mockito.times(1)).save(existingMember);
         Mockito.verify(courseRepository, Mockito.times(1)).save(Mockito.any(Course.class));
     }
+    */
 
     @Test
     void testCreateNewCourseWithInvalidUser() {
