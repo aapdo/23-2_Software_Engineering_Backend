@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -102,6 +103,18 @@ public class CourseService   {
     }
 
     public Course deleteCourse(String authorizationHeader, CourseDto courseDto) {
+        String token = authorizationHeader.substring(7);
+        Long userId = tokenService.getCurrentUserId(token);
+        Member member = memberRepository.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("잘못된 계정 정보입니다."));
+        Course course = courseRepository.findById(courseDto.getCourseId())
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 Course입니다."));
+        if (!course.getMember().equals(member)) {
+            throw new ForbiddenException("잘못된 접근입니다.", HttpStatus.FORBIDDEN);
+        }
+        course.setDeletedDate(new Date());
 
+        courseRepository.save(course);
+        return course;
     }
 }

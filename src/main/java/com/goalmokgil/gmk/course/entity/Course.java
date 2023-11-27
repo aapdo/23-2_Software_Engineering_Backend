@@ -52,6 +52,10 @@ public class Course {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm a")
     private Date deletedDate;
 
+    public void setDeletedDate(Date deletedDate) {
+        this.deletedDate = deletedDate;
+    }
+
     public void updateCourse(CourseDto updatedCourse) {
         this.courseId = updatedCourse.getCourseId();
         this.courseData = updatedCourse.getCourseData();
