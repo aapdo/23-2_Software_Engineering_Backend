@@ -20,11 +20,21 @@ public class CourseController {
 
 
     // member 관련 내용도 받을 거임.
-    @PostMapping("create")
+    @PostMapping("/create")
     public CourseDto createNewCourse(@RequestHeader("Authorization") String authorizationHeader, @RequestBody CourseDto courseDto) {
         return new CourseDto(courseService.createNewCourse(authorizationHeader, courseDto));
-
     }
+
+    @PostMapping("/update")
+    public CourseDto updateCourse(@RequestHeader("Authorization") String authorizationHeader, @RequestBody CourseDto courseDto) {
+        return new CourseDto(courseService.updateCourse(authorizationHeader, courseDto));
+    }
+
+    @PostMapping("/update")
+    public CourseDto deleteCourse(@RequestHeader("Authorization") String authorizationHeader, @RequestBody CourseDto courseDto) {
+        return new CourseDto(courseService.deleteCourse(authorizationHeader, courseDto));
+    }
+
 
     @GetMapping("view/{courseId}")
     public CourseDto viewCourse(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long courseId) {
@@ -37,11 +47,6 @@ public class CourseController {
      */
     @GetMapping("/myCourses")
     public List<CourseDto> viewMyCourse(@RequestHeader("Authorization") String authorizationHeader) {
-        ArrayList<CourseDto> returnList = new ArrayList<>();
-        List<Course> result = courseService.getAllCourseByMemberId(authorizationHeader);
-        for (Course course : result) {
-            returnList.add(new CourseDto(course));
-        }
-        return returnList;
+        return courseService.getAllCourseByMemberId(authorizationHeader);
     }
 }

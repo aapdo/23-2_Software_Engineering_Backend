@@ -4,10 +4,10 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class ForbiddenCourseException extends RuntimeException {
+public class ForbiddenException extends RuntimeException {
     private final HttpStatus status;
 
-    public ForbiddenCourseException(String msg, HttpStatus status) {
+    public ForbiddenException(String msg, HttpStatus status) {
         super(msg);
         this.status = status;
     }
