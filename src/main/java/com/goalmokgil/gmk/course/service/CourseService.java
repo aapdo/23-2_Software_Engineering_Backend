@@ -79,8 +79,12 @@ public class CourseService   {
                 () -> new EntityNotFoundException("잘못된 계정 정보입니다."));
         // You can use the userId or other information from the token to set properties of the new course
         Course newCourse = new Course(courseDto, member);
-        // member의 course에 add 해줌.
-        member.getCourse().add(newCourse);
+
+        member.getCourses().add(newCourse);
+
+      
+     
+
         memberRepository.save(member);
         courseRepository.save(newCourse);
         return newCourse;
