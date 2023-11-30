@@ -34,9 +34,7 @@ public class CourseService   {
 
     // member id, course id로 해당 코스를 조회하고 리턴함.
     // 없을 경우 빈 코스 템플릿을 생성하고 db에 저장 후 리턴.
-    public Course getCourseByCourseId(String authorizationHeader, Long courseId){
-        String token = authorizationHeader.substring(7);
-        Long userId = tokenService.getCurrentUserId(token);
+    public Course getCourseByCourseId(Long userId, Long courseId){
         Optional<Course> courseByCourseId = courseRepository.findById(courseId);
         Course course = courseByCourseId.orElseThrow(EntityNotFoundException::new);
         // 삭제된 코스일 경우
@@ -50,9 +48,7 @@ public class CourseService   {
         }
     }
 
-    public List<CourseDto> getAllCourseByMemberId(String authorizationHeader){
-        String token = authorizationHeader.substring(7);
-        Long userId = tokenService.getCurrentUserId(token);
+    public List<CourseDto> getAllCourseByMemberId(Long userId){
         Member member = memberRepository.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException("잘못된 계정 정보입니다."));
         ArrayList<CourseDto> result = new ArrayList<>();
@@ -65,9 +61,7 @@ public class CourseService   {
     }
 
     @Transactional
-    public Course createNewCourse(String authorizationHeader, CourseDto courseDto) {
-        String token = authorizationHeader.substring(7);
-        Long userId = tokenService.getCurrentUserId(token);
+    public Course createNewCourse(Long userId, CourseDto courseDto) {
         log.info("request create userId = " + userId);
         // course Dto에 저장된 userId와 로그인 토큰에 저장된 아이디가 다른 경우
         if (!userId.equals(courseDto.getUserId())) {
@@ -88,12 +82,13 @@ public class CourseService   {
 
 
     @Transactional
-    public Course updateCourse(String authorizationHeader, CourseDto updatedCourseDto) {
+    public Course updateCourse(Long userId, CourseDto updatedCourseDto) {
+
         Long courseId = updatedCourseDto.getCourseId();
+
         Course existingCourse = courseRepository.findById(courseId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 Course입니다."));
-        String token = authorizationHeader.substring(7);
-        Long userId = tokenService.getCurrentUserId(token);
+
         Member member = memberRepository.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException("잘못된 계정 정보입니다."));
 
@@ -107,9 +102,7 @@ public class CourseService   {
         return existingCourse;
     }
 
-    public Course deleteCourse(String authorizationHeader, CourseDto courseDto) {
-        String token = authorizationHeader.substring(7);
-        Long userId = tokenService.getCurrentUserId(token);
+    public Course deleteCourse(Long userId, CourseDto courseDto) {
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("잘못된 계정 정보입니다."));
         Course course = courseRepository.findById(courseDto.getCourseId())
