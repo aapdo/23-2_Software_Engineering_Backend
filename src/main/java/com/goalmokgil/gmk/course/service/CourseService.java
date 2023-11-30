@@ -68,7 +68,7 @@ public class CourseService   {
     public Course createNewCourse(String authorizationHeader, CourseDto courseDto) {
         String token = authorizationHeader.substring(7);
         Long userId = tokenService.getCurrentUserId(token);
-        System.out.println("userId = " + userId);
+        log.info("request create userId = " + userId);
         // course Dto에 저장된 userId와 로그인 토큰에 저장된 아이디가 다른 경우
         if (!userId.equals(courseDto.getUserId())) {
             //throw new EntityNotFoundException("잘못된 계정 정보입니다.");
@@ -80,9 +80,6 @@ public class CourseService   {
         Course newCourse = new Course(courseDto, member);
 
         member.getCourses().add(newCourse);
-
-      
-     
 
         memberRepository.save(member);
         courseRepository.save(newCourse);

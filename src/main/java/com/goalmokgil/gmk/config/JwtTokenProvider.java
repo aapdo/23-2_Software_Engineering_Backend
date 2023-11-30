@@ -65,10 +65,10 @@ public class JwtTokenProvider {
         if (claims.get("auth") == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }
-
         // 클레임에서 권한 정보 가져오기
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get("auth").toString().split(","))
+                        .filter(authority -> !authority.isEmpty()) // 빈 문자열 제외
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 

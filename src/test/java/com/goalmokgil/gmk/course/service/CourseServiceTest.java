@@ -142,13 +142,20 @@ public class CourseServiceTest {
         place.setPlaceId(1L);
 
 
-
         place.setDate(new Date());
         CourseData courseData = new CourseData();
         courseData.addPlace(place);
         courseData.setCourseTitle("test title");
 
-        CourseDto courseDto = new CourseDto(null, member.getUserId(), courseData, new Date(), new Date());
+        Long userId = tokenService.getCurrentUserId(authorizationHeader.substring(7));
+
+        CourseDto courseDto = new CourseDto(null,  userId, courseData, new Date(), new Date());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String courseDtoStr = objectMapper.writeValueAsString(courseDto);
+        System.out.println("courseDtoStr = " + courseDtoStr);
+
+        System.out.println("courseDto = " + courseDto);
 
 
         Course savedCourse = courseService.createNewCourse(authorizationHeader, courseDto);
@@ -168,15 +175,11 @@ public class CourseServiceTest {
 
         //System.out.println("newCourse = " + newCourse);
 
-        ObjectMapper objectMapper = new ObjectMapper();
         String test = objectMapper.writeValueAsString(place);
         System.out.println("test = " + test);
 
 
 
-        //CourseDto courseDto = new CourseDto(savedCourse);
-        //String courseDtoStr = objectMapper.writeValueAsString(courseDto);
-        //System.out.println("courseDtoStr = " + courseDtoStr);
 
         //Assertions.assertThat(savedCourse.getCourseId()).isEqualTo(course.getCourseId());
     }
