@@ -3,9 +3,11 @@ package com.goalmokgil.gmk.course.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goalmokgil.gmk.GmkApplication;
+import com.goalmokgil.gmk.account.dto.TokenDto;
 import com.goalmokgil.gmk.account.dto.req.ReqSignupDto;
 import com.goalmokgil.gmk.account.entity.Member;
 import com.goalmokgil.gmk.account.repository.MemberRepository;
+import com.goalmokgil.gmk.account.service.LoginService;
 import com.goalmokgil.gmk.account.service.SignupService;
 import com.goalmokgil.gmk.account.service.TokenService;
 import com.goalmokgil.gmk.course.dto.CourseDto;
@@ -15,6 +17,7 @@ import com.goalmokgil.gmk.course.entity.Place;
 import com.goalmokgil.gmk.course.repository.CourseRepository;
 import com.goalmokgil.gmk.exception.EntityNotFoundException;
 import org.assertj.core.api.Assertions;
+import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -48,9 +51,28 @@ public class CourseServiceTest {
 
     @Autowired
     private SignupService signupService;
+    @Autowired
+    private LoginService loginService;
+
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    public static String generateRandomString(int length) {
+        Random random = new Random();
+        StringBuilder stringBuilder = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++) {
+            int randomIndex = random.nextInt(CHARACTERS.length());
+            char randomChar = CHARACTERS.charAt(randomIndex);
+            stringBuilder.append(randomChar);
+        }
+
+        return stringBuilder.toString();
+    }
 
     @BeforeEach
     void setUp() {
+        memberRepository.deleteAll();
+        courseRepository.deleteAll();
         Mockito.reset(tokenService, memberRepository, courseRepository);
         MockitoAnnotations.openMocks(this);    }
     @Test
@@ -109,16 +131,15 @@ public class CourseServiceTest {
 
     @Test
     void saveCourse() throws JsonProcessingException, JsonProcessingException {
-        String authorizationHeader = "Bearer your_token_here";
-
-        Member member = signupService.memberSignup(new ReqSignupDto("jy", "1234", "jy", "testjy", "20000830", "jade@naver.com"));
-
-        Member memTest = memberRepository.findById(member.getUserId()).orElseThrow(
-                () -> new EntityNotFoundException("잘못된 계정 정보입니다."));
-
+        String loginId = generateRandomString(4);
+        Member member = signupService.memberSignup(new ReqSignupDto(loginId, "1234", "jy", "testjy", "20000830", "jade@naver.com"));
+        TokenDto tokenDto = loginService.login(loginId, "1234");
+        String authorizationHeader = tokenDto.getAccessToken();
+        System.out.println("authorizationHeader = " + authorizationHeader);
         Place place = new Place();
         place.setPlaceName("test name");
         place.setPlaceId(1L);
+
 
 
         place.setDate(new Date());
@@ -128,13 +149,6 @@ public class CourseServiceTest {
 
         CourseDto courseDto = new CourseDto(null, member.getUserId(), courseData, new Date(), new Date());
 
-        Mockito.when(tokenService.getCurrentUserId(Mockito.any())).thenReturn(member.getUserId());
-
-
-        //Course newCourse = new Course(courseDto, member);
-
-        courseService.test();
-        System.out.println("tokenService.getCurrentUserId(authorizationHeader.substring(7)) = " + tokenService.getCurrentUserId(authorizationHeader.substring(7)));
 
         Course savedCourse = courseService.createNewCourse(authorizationHeader, courseDto);
 
