@@ -3,11 +3,14 @@ package com.goalmokgil.gmk.account.service;
 import com.goalmokgil.gmk.account.dto.req.ReqSignupDto;
 import com.goalmokgil.gmk.account.entity.Member;
 import com.goalmokgil.gmk.account.repository.MemberRepository;
+import com.goalmokgil.gmk.course.entity.Course;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 
 @Slf4j
 @Transactional
@@ -26,6 +29,7 @@ public class SignupService {
                 .nickname(reqSignupDto.getNickname())
                 .birth(reqSignupDto.getBirth())
                 .email(reqSignupDto.getEmail())
+                .course(new ArrayList<Course>())
                 .build();
         memberRepository.save(member);
         return member;

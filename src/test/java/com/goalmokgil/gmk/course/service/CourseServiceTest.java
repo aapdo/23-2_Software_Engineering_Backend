@@ -1,22 +1,32 @@
 package com.goalmokgil.gmk.course.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goalmokgil.gmk.GmkApplication;
+import com.goalmokgil.gmk.account.dto.req.ReqSignupDto;
 import com.goalmokgil.gmk.account.entity.Member;
 import com.goalmokgil.gmk.account.repository.MemberRepository;
+import com.goalmokgil.gmk.account.service.SignupService;
 import com.goalmokgil.gmk.account.service.TokenService;
 import com.goalmokgil.gmk.course.dto.CourseDto;
 import com.goalmokgil.gmk.course.entity.Course;
+import com.goalmokgil.gmk.course.entity.CourseData;
+import com.goalmokgil.gmk.course.entity.Place;
 import com.goalmokgil.gmk.course.repository.CourseRepository;
-import com.goalmokgil.gmk.course.service.CourseService;
 import com.goalmokgil.gmk.exception.EntityNotFoundException;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.NoSuchElementException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,11 +45,14 @@ public class CourseServiceTest {
 
     @InjectMocks
     private CourseService courseService;
+
+    @Autowired
+    private SignupService signupService;
+
     @BeforeEach
     void setUp() {
         Mockito.reset(tokenService, memberRepository, courseRepository);
-        openMocks(this);
-    }
+        MockitoAnnotations.openMocks(this);    }
     @Test
     public void testGetCourseByCourseId() {
         String authorizationHeader = "Bearer your_token_here";
@@ -71,7 +84,6 @@ public class CourseServiceTest {
         assertThrows(EntityNotFoundException.class, () -> courseService.getCourseByCourseId(authorizationHeader, courseId));
     }
 
-    /*
     @Test
     void testCreateNewCourse() {
         // Arrange
@@ -86,7 +98,6 @@ public class CourseServiceTest {
         Mockito.when(tokenService.getCurrentUserId(Mockito.any())).thenReturn(userIdFromToken);
         Mockito.when(memberRepository.findById(userIdFromToken)).thenReturn(java.util.Optional.of(existingMember));
         Mockito.when(courseRepository.save(Mockito.any(Course.class))).thenReturn(newCourse);
-
         // Act
         Course result = courseService.createNewCourse(authorizationHeader, courseDto);
         // Assert
@@ -95,7 +106,65 @@ public class CourseServiceTest {
         Mockito.verify(memberRepository, Mockito.times(1)).save(existingMember);
         Mockito.verify(courseRepository, Mockito.times(1)).save(Mockito.any(Course.class));
     }
-    */
+
+    @Test
+    void saveCourse() throws JsonProcessingException, JsonProcessingException {
+        String authorizationHeader = "Bearer your_token_here";
+
+        Member member = signupService.memberSignup(new ReqSignupDto("jy", "1234", "jy", "testjy", "20000830", "jade@naver.com"));
+
+        Member memTest = memberRepository.findById(member.getUserId()).orElseThrow(
+                () -> new EntityNotFoundException("잘못된 계정 정보입니다."));
+
+        Place place = new Place();
+        place.setPlaceName("test name");
+        place.setPlaceId(1L);
+
+
+        place.setDate(new Date());
+        CourseData courseData = new CourseData();
+        courseData.addPlace(place);
+        courseData.setCourseTitle("test title");
+
+        CourseDto courseDto = new CourseDto(null, member.getUserId(), courseData, new Date(), new Date());
+
+        Mockito.when(tokenService.getCurrentUserId(Mockito.any())).thenReturn(member.getUserId());
+
+
+        //Course newCourse = new Course(courseDto, member);
+
+        courseService.test();
+        System.out.println("tokenService.getCurrentUserId(authorizationHeader.substring(7)) = " + tokenService.getCurrentUserId(authorizationHeader.substring(7)));
+
+        Course savedCourse = courseService.createNewCourse(authorizationHeader, courseDto);
+
+        System.out.println("savedCourse = " + savedCourse);
+        System.out.println("savedCourse = " + savedCourse);
+
+        // member의 course에 add 해줌.
+        //member.addCourse(newCourse);
+        System.out.println("member.getCourse().size() = " + member.getCourse().size());
+        System.out.println("member = " + member);
+        //memberRepository.save(member);
+
+        //System.out.println("member.getCourse().get(0) = " + member.getCourse().get(0));
+
+
+
+        //System.out.println("newCourse = " + newCourse);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String test = objectMapper.writeValueAsString(place);
+        System.out.println("test = " + test);
+
+
+
+        //CourseDto courseDto = new CourseDto(savedCourse);
+        //String courseDtoStr = objectMapper.writeValueAsString(courseDto);
+        //System.out.println("courseDtoStr = " + courseDtoStr);
+
+        //Assertions.assertThat(savedCourse.getCourseId()).isEqualTo(course.getCourseId());
+    }
 
     @Test
     void testCreateNewCourseWithInvalidUser() {

@@ -62,7 +62,6 @@ public class Course {
         this.modifiedDate = new Date();
     }
 
-
     public Course(Long courseId, Member member, CourseData courseData, Date createdDate, Date modifiedDate) {
         this.courseId = courseId;
         this.member = member;

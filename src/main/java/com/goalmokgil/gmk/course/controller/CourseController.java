@@ -30,7 +30,7 @@ public class CourseController {
         return new CourseDto(courseService.updateCourse(authorizationHeader, courseDto));
     }
 
-    @PostMapping("/update")
+    @PostMapping("/delete")
     public CourseDto deleteCourse(@RequestHeader("Authorization") String authorizationHeader, @RequestBody CourseDto courseDto) {
         return new CourseDto(courseService.deleteCourse(authorizationHeader, courseDto));
     }

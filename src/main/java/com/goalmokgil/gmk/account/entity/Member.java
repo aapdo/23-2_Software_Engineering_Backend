@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@ToString(exclude = "course")
 @EqualsAndHashCode
 public class Member {
 
@@ -41,4 +41,8 @@ public class Member {
     // Post push하면 이것도 쓰면 됨
 //    @OneToMany(cascade = CascadeType.ALL)
 //    private List<Post> post;
+
+    public void addCourse(Course course) {
+        this.course.add(course);
+    }
 }
