@@ -29,7 +29,7 @@ public class SignupService {
                 .nickname(reqSignupDto.getNickname())
                 .birth(reqSignupDto.getBirth())
                 .email(reqSignupDto.getEmail())
-                .course(new ArrayList<Course>())
+                .courses(new ArrayList<Course>())
                 .build();
         memberRepository.save(member);
         return member;

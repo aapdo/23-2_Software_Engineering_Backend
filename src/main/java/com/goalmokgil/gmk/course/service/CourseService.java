@@ -56,7 +56,7 @@ public class CourseService   {
         Member member = memberRepository.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException("잘못된 계정 정보입니다."));
         ArrayList<CourseDto> result = new ArrayList<>();
-        for (Course course : member.getCourse()) {
+        for (Course course : member.getCourses()) {
             if (course.getDeletedDate() != null) {
                 result.add(new CourseDto(course));
             }

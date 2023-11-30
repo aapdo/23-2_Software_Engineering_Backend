@@ -144,7 +144,7 @@ public class CourseServiceTest {
 
         // member의 course에 add 해줌.
         //member.addCourse(newCourse);
-        System.out.println("member.getCourse().size() = " + member.getCourse().size());
+        System.out.println("member.getCourse().size() = " + member.getCourses().size());
         System.out.println("member = " + member);
         //memberRepository.save(member);
 

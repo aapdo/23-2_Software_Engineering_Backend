@@ -44,6 +44,6 @@ public class Member {
     private List<Post> posts;
 
     public void addCourse(Course course) {
-        this.course.add(course);
+        this.courses.add(course);
     }
 }
