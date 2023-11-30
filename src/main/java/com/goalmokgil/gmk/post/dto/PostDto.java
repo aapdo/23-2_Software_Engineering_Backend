@@ -11,8 +11,8 @@ import lombok.Setter;
 public class PostDto {
 
     private Long postId;
-    //private Long memberId; // 게시글을 작성한 사용자의 ID
-    //private Long courseId; // 관련 코스의 ID
+    private Long memberId; // 게시글을 작성한 사용자의 ID
+    private Long courseId; // 관련 코스의 ID
     private String title;
     private String content;
 

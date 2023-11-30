@@ -21,15 +21,12 @@ public class LoginController {
         String memberId = reqLoginDto.getLoginId();
         String password = reqLoginDto.getPassword();
 
-        JwtLoginDto jwtLoginDto = new JwtLoginDto();
-        /*
         JwtLoginDto jwtLoginDto = JwtLoginDto.builder()
                 .grantType(loginService.login(memberId, password).getGrantType())
                 .accessToken(loginService.login(memberId, password).getAccessToken())
-                .memberId(memberId)
+                .loginId(reqLoginDto.getLoginId())
                 .build();
 
-         */
         return jwtLoginDto;
     }
 }

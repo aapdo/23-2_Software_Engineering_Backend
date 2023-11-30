@@ -34,6 +34,7 @@ public class Post {
     @NotNull
     private String title;
     @NotNull
+    @Column(columnDefinition = "TEXT")
     private String content;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private Date createdDate;
