@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "course")
+@ToString(exclude = "courses")
 @EqualsAndHashCode
 public class Member {
 
