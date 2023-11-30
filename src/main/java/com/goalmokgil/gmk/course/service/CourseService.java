@@ -59,7 +59,7 @@ public class CourseService   {
         });
         // You can use the userId or other information from the token to set properties of the new course
         Course newCourse = new Course(courseDto, member);
-        member.getCourse().add(newCourse);
+        member.getCourses().add(newCourse);
         memberRepository.save(member);
         courseRepository.save(newCourse);
         return newCourse;

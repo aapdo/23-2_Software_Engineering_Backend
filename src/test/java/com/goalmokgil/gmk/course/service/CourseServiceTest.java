@@ -7,7 +7,6 @@ import com.goalmokgil.gmk.account.service.TokenService;
 import com.goalmokgil.gmk.course.dto.CourseDto;
 import com.goalmokgil.gmk.course.entity.Course;
 import com.goalmokgil.gmk.course.repository.CourseRepository;
-import com.goalmokgil.gmk.course.service.CourseService;
 import com.goalmokgil.gmk.exception.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -91,7 +89,7 @@ public class CourseServiceTest {
 
         // Assert
         assertEquals(newCourse, result);
-        assertEquals(existingMember.getCourse().size(), 1); // Assuming that adding a new course updates the member's courses
+        assertEquals(existingMember.getCourses().size(), 1); // Assuming that adding a new course updates the member's courses
         Mockito.verify(memberRepository, Mockito.times(1)).save(existingMember);
         Mockito.verify(courseRepository, Mockito.times(1)).save(Mockito.any(Course.class));
     }
