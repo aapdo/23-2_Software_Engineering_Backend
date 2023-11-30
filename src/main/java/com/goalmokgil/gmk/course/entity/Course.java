@@ -12,6 +12,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -51,6 +52,15 @@ public class Course {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm a")
     private Date deletedDate;
 
+    public void setDeletedDate(Date deletedDate) {
+        this.deletedDate = deletedDate;
+    }
+
+    public void updateCourse(CourseDto updatedCourse) {
+        this.courseId = updatedCourse.getCourseId();
+        this.courseData = updatedCourse.getCourseData();
+        this.modifiedDate = new Date();
+    }
 
     public Course(Long courseId, Member member, CourseData courseData, Date createdDate, Date modifiedDate) {
         this.courseId = courseId;

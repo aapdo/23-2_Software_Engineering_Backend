@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@ToString(exclude = "course")
 @EqualsAndHashCode
 public class Member {
 
@@ -39,6 +39,11 @@ public class Member {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Course> courses;
 
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<Post> posts;
+
+    public void addCourse(Course course) {
+        this.course.add(course);
+    }
 }

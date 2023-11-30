@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(ForbiddenCourseException.class)
-    public ResponseEntity<String> handleForbiddenCourseException(ForbiddenCourseException exception) {
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<String> handleForbiddenCourseException(ForbiddenException exception) {
         return new ResponseEntity<>(exception.getMessage(), exception.getStatus());
     }
 }
