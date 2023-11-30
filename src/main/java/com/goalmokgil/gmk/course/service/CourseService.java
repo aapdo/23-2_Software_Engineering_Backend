@@ -56,7 +56,7 @@ public class CourseService   {
         Member member = memberRepository.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException("잘못된 계정 정보입니다."));
         ArrayList<CourseDto> result = new ArrayList<>();
-        for (Course course : member.getCourse()) {
+        for (Course course : member.getCourses()) {
             if (course.getDeletedDate() != null) {
                 result.add(new CourseDto(course));
             }
@@ -78,8 +78,12 @@ public class CourseService   {
                 () -> new EntityNotFoundException("잘못된 계정 정보입니다."));
         // You can use the userId or other information from the token to set properties of the new course
         Course newCourse = new Course(courseDto, member);
-        // member의 course에 add 해줌.
-        member.getCourse().add(newCourse);
+
+        member.getCourses().add(newCourse);
+
+      
+     
+
         memberRepository.save(member);
         courseRepository.save(newCourse);
         return newCourse;

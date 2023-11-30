@@ -30,6 +30,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -124,7 +125,7 @@ public class CourseServiceTest {
         Course result = courseService.createNewCourse(authorizationHeader, courseDto);
         // Assert
         assertEquals(newCourse, result);
-        assertEquals(existingMember.getCourse().size(), 1); // Assuming that adding a new course updates the member's courses
+        assertEquals(existingMember.getCourses().size(), 1); // Assuming that adding a new course updates the member's courses
         Mockito.verify(memberRepository, Mockito.times(1)).save(existingMember);
         Mockito.verify(courseRepository, Mockito.times(1)).save(Mockito.any(Course.class));
     }
@@ -157,7 +158,7 @@ public class CourseServiceTest {
 
         // member의 course에 add 해줌.
         //member.addCourse(newCourse);
-        System.out.println("member.getCourse().size() = " + member.getCourse().size());
+        System.out.println("member.getCourse().size() = " + member.getCourses().size());
         System.out.println("member = " + member);
         //memberRepository.save(member);
 

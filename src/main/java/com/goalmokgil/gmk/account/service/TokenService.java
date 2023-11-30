@@ -19,5 +19,6 @@ public class TokenService {
     public Long getCurrentUserId(String token) {
         Claims claims = jwtTokenProvider.extractClaims(token);
         return Long.parseLong(claims.get("userId").toString());
+
     }
 }
