@@ -19,12 +19,12 @@ public class LikeController {
 
     @PostMapping
     public ResponseEntity<?> addLike(@RequestBody LikeDto likeDto) {
-        boolean isLiked = likeService.addLike(likeDto.getUserId(), likeDto.getPostId());
+        boolean isLikedNow = likeService.addLike(likeDto.getUserId(), likeDto.getPostId());
 
         Map<String, Object> response = new HashMap<>();
         response.put("userId", likeDto.getUserId());
         response.put("postId", likeDto.getPostId());
-        response.put("isLiked", isLiked);
+        response.put("isLiked", isLikedNow);
 
         return ResponseEntity.ok(response);
     }

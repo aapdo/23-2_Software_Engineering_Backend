@@ -12,6 +12,8 @@ import org.springframework.data.relational.core.sql.Like;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -28,13 +30,25 @@ public class LikeService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
-        if (!likeRepository.existsByMemberAndPost(member, post)) {
+        Optional<Likes> existingLike = likeRepository.findByMemberAndPost(member, post);
+
+        if (existingLike.isPresent()) {
+            // 이미 '좋아요'가 있으면 제거
+            likeRepository.delete(existingLike.get());
+            return false; // '좋아요' 제거됨
+        }
+        else { // '좋아요'가 없으면 추가
             Likes likes = new Likes();
             likes.setMember(member);
             likes.setPost(post);
             likeRepository.save(likes);
-            return true; // '좋아요'가 추가됨
+            return true; // '좋아요' 추가됨
         }
-        return false; // 이미 '좋아요'가 있음
+    }
+
+    public long countLikesByPost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+        return likeRepository.countByPost(post);
     }
 }
