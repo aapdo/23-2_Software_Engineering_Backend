@@ -76,7 +76,9 @@ public class CourseService   {
         //member.getCourses().add(newCourse);
 
         //memberRepository.save(member);
+//        member.addCourse(newCourse); // 추가해야할수도 ? 일단 괜찮
         courseRepository.save(newCourse);
+//        memberRepository.save(member); // 추가해야할수도 ? 일단 괜찮
         return newCourse;
     }
 
