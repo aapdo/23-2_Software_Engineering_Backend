@@ -4,8 +4,10 @@ import com.goalmokgil.gmk.account.service.TokenService;
 import com.goalmokgil.gmk.course.dto.CourseDto;
 import com.goalmokgil.gmk.course.entity.Course;
 import com.goalmokgil.gmk.course.service.CourseService;
+import com.goalmokgil.gmk.post.entity.Post;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,28 +25,28 @@ public class CourseController {
 
     // member 관련 내용도 받을 거임.
     @PostMapping("/create")
-    public CourseDto createNewCourse(@RequestHeader("Authorization") String authorizationHeader, @RequestBody CourseDto courseDto) {
+    public ResponseEntity<CourseDto> createNewCourse(@RequestHeader("Authorization") String authorizationHeader, @RequestBody CourseDto courseDto) {
         Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);
-        return new CourseDto(courseService.createNewCourse(userId, courseDto));
+        return ResponseEntity.ok(new CourseDto(courseService.createNewCourse(userId, courseDto)));
     }
 
     @PostMapping("/update")
-    public CourseDto updateCourse(@RequestHeader("Authorization") String authorizationHeader, @RequestBody CourseDto courseDto) {
+    public ResponseEntity<CourseDto> updateCourse(@RequestHeader("Authorization") String authorizationHeader, @RequestBody CourseDto courseDto) {
         Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);
-        return new CourseDto(courseService.updateCourse(userId, courseDto));
+        return ResponseEntity.ok(new CourseDto(courseService.updateCourse(userId, courseDto)));
     }
 
     @PostMapping("/delete")
-    public CourseDto deleteCourse(@RequestHeader("Authorization") String authorizationHeader, @RequestBody CourseDto courseDto) {
+    public ResponseEntity<CourseDto> deleteCourse(@RequestHeader("Authorization") String authorizationHeader, @RequestBody CourseDto courseDto) {
         Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);
-        return new CourseDto(courseService.deleteCourse(userId, courseDto));
+        return ResponseEntity.ok(new CourseDto(courseService.deleteCourse(userId, courseDto)));
     }
 
 
     @GetMapping("view/{courseId}")
-    public CourseDto viewCourse(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long courseId) {
+    public ResponseEntity<CourseDto> viewCourse(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long courseId) {
         Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);
-        return new CourseDto(courseService.getCourseByCourseId(userId, courseId));
+        return ResponseEntity.ok(new CourseDto(courseService.getCourseByCourseId(userId, courseId)));
     }
 
     /**
@@ -52,8 +54,8 @@ public class CourseController {
      * @return ArrayList<Course>
      */
     @GetMapping("/myCourses")
-    public List<CourseDto> viewMyCourse(@RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<List<CourseDto>> viewMyCourse(@RequestHeader("Authorization") String authorizationHeader) {
         Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);
-        return courseService.getAllCourseByMemberId(userId);
+        return ResponseEntity.ok(courseService.getAllCourseByMemberId(userId));
     }
 }
