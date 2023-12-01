@@ -13,8 +13,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,7 +29,12 @@ public class Post {
     @JoinColumn(name = "userId")
     private Member author;
     @OneToMany // (mappedBy = "post") 삭제
-    private Set<Course> relatedCourses = new HashSet<>();
+    private List<Course> relatedCourses;
+    @OneToMany
+    private List<Likes> likes;
+
+
+
     @NotNull
     private String title;
     @NotNull
@@ -43,9 +47,10 @@ public class Post {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private Date modifiedDate;
 
-    public Post(Member author, Set<Course> relatedCourses, String title, String content, Date createdDate, Date modifiedDate) {
+    public Post(Member author, List<Course> relatedCourses, List<Likes> likes, String title, String content, Date createdDate, Date modifiedDate) {
         this.author = author;
         this.relatedCourses = relatedCourses;
+        this.likes = likes;
         this.title = title;
         this.content = content;
         this.createdDate = createdDate;
