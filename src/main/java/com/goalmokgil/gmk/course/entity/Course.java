@@ -3,6 +3,7 @@ package com.goalmokgil.gmk.course.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.goalmokgil.gmk.account.entity.Member;
 import com.goalmokgil.gmk.course.dto.CourseDto;
+import com.goalmokgil.gmk.post.entity.Post;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -33,6 +34,10 @@ public class Course {
     @NotNull
     @JoinColumn(name = "userId")
     private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "postId")
+    private Post post;
 
     @Type(JsonType.class)
     @Column(name = "courseData", columnDefinition = "longtext")
