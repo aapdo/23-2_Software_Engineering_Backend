@@ -16,6 +16,7 @@ src/main/resources/application.yml
 .springBeans
 .sts4-cache
 .gradle/
+gradle 2/wrapper/
 gradle/wrapper/
 bin/
 !**/src/main/**/bin/
