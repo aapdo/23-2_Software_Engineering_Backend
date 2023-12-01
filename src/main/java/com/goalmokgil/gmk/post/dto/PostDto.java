@@ -18,17 +18,5 @@ public class PostDto {
     private Set<Long> courseIds; // 관련 코스의 ID들
     private String title; // 게시글 제목
     private String content; // 게시글 내용
-    private CourseData courseData;
-    private Date createdDate;
-    private Date modifiedDate;
-
-    public PostDto(Long memberId, Set<Long> courseIds, String title, String content, CourseData courseData, Date createdDate, Date modifiedDate) {
-        this.memberId = memberId;
-        this.courseIds = courseIds;
-        this.title = title;
-        this.content = content;
-        this.courseData = courseData;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
-    }
+//    private CourseData courseData;
 }

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -38,12 +39,14 @@ public class Post {
     @CreatedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private Date createdDate;
+    @LastModifiedDate
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    private Date modifiedDate;
 
-    public Post(Member author, Set<Course> relatedCourses, String title, String content, Date createdDate) {
+    public Post(Member author, Set<Course> relatedCourses, String title, String content) {
         this.author = author;
         this.relatedCourses = relatedCourses;
         this.title = title;
         this.content = content;
-        this.createdDate = createdDate;
     }
 }
