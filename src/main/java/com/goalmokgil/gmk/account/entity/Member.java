@@ -1,6 +1,7 @@
 package com.goalmokgil.gmk.account.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.goalmokgil.gmk.course.entity.Course;
+import com.goalmokgil.gmk.post.entity.Likes;
 import com.goalmokgil.gmk.post.entity.Post;
 import jakarta.persistence.*;
 import lombok.*;
@@ -42,9 +43,13 @@ public class Member {
     @JsonIgnore // 참조 무한재귀 방지용
     private List<Course> courses;
 
-    @OneToMany( cascade = CascadeType.ALL) // author가 member랑 똑같음
+    @OneToMany( cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Post> posts;
+
+    @OneToMany(cascade = CascadeType.ALL) // mappedBy = "member" 안넣은 상태
+    @JsonIgnore
+    private List<Likes> likes;
 
     public void addCourse(Course course) {
         this.courses.add(course);

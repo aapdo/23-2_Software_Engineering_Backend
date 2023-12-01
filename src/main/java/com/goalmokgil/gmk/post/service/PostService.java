@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,7 +49,7 @@ public class PostService {
                 .orElseThrow(() -> new RuntimeException("Member not found"));
 
         // 코스 정보 조회 및 설정
-        Set<Course> courses = new HashSet<>();
+        List<Course> courses = new ArrayList<>(); // List 초기화
         for (Long courseId : postDto.getCourseIds()) {
             Course course = courseRepository.findById(courseId)
                     .orElseThrow(() -> new RuntimeException("Course not found"));
@@ -64,6 +65,7 @@ public class PostService {
 
         return postRepository.save(post);
     }
+
 
     // 게시글 수정하기
     public Post updatePost(Long postId, PostDto postDto) {
