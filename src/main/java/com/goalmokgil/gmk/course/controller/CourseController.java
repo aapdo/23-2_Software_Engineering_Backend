@@ -2,15 +2,12 @@ package com.goalmokgil.gmk.course.controller;
 
 import com.goalmokgil.gmk.account.service.TokenService;
 import com.goalmokgil.gmk.course.dto.CourseDto;
-import com.goalmokgil.gmk.course.entity.Course;
 import com.goalmokgil.gmk.course.service.CourseService;
-import com.goalmokgil.gmk.post.entity.Post;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
