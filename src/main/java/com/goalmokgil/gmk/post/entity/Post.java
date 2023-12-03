@@ -60,6 +60,7 @@ public class Post {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private Date modifiedDate;
 
+
     public Post(Member author, List<Course> relatedCourses, List<Likes> likes, Set<Tag> tags, String title, String content, Date createdDate, Date modifiedDate) {
         this.author = author;
         this.relatedCourses = relatedCourses;
