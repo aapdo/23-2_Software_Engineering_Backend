@@ -24,6 +24,7 @@ public class LikeService {
     private final MemberRepository memberRepository;
     private final LikeRepository likeRepository;
 
+    @Transactional
     public boolean addLike(Long userId, Long postId) {
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));

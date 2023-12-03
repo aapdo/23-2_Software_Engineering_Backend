@@ -1,44 +1,64 @@
 package com.goalmokgil.gmk.post.dto;
 
-import com.goalmokgil.gmk.post.entity.Likes;
-import com.goalmokgil.gmk.post.entity.Post;
-import com.goalmokgil.gmk.post.entity.PostData;
-import com.goalmokgil.gmk.post.entity.Tag;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.goalmokgil.gmk.post.entity.*;
+import lombok.*;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Data
 public class PostDto {
     private Long postId;
     private Long courseId;
     private Long userId;
+    private String title;
     private String authorName;
     private String authorNickName;
     private String loginId;
     private String email;
-    private PostData postData;
+    private List<PostContent> postData;
+    //private PostData postData;
 
-    private String title;
+    private List<Long> likes;
+    private List<String> tags;
 
-    private List<Likes> likes;
-    private Set<Tag> tags;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    private Date createdDate;
 
-    public PostDto(Long postId, Long courseId, Long userId, String authorName, String authorNickName, String loginId, String email, PostData postData) {
-        this.postId = postId;
-        this.courseId = courseId;
-        this.userId = userId;
-        this.authorName = authorName;
-        this.authorNickName = authorNickName;
-        this.loginId = loginId;
-        this.email = email;
-        this.postData = postData;
-    }
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    private Date modifiedDate;
 
     public PostDto(Post post) {
+        this.postId = post.getPostId();
+        this.courseId = post.getRelatedCourse().getCourseId();
+        this.userId = post.getAuthor().getUserId();
+        this.authorName = post.getAuthor().getName();
+        this.authorNickName = post.getAuthor().getNickname();
+        this.email = post.getAuthor().getEmail();
+        this.loginId = post.getAuthor().getLoginId();
+        this.postData = post.getPostData();
+        this.createdDate = post.getCreatedDate();
+        this.modifiedDate = post.getModifiedDate();
+        this.title = post.getTitle();
+
+        this.tags = new ArrayList<>();
+        this.likes = new ArrayList<>();
+
+        for (Tag tag : post.getTags()) {
+            this.tags.add(tag.getName());
+        }
+        assert post.getLikes() != null;
+        for (Likes likes : post.getLikes()) {
+            this.likes.add(likes.getMember().getUserId());
+        }
 
     }
 }

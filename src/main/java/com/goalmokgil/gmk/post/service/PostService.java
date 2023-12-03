@@ -7,11 +7,14 @@ import com.goalmokgil.gmk.course.repository.CourseRepository;
 import com.goalmokgil.gmk.post.dto.PostDto;
 import com.goalmokgil.gmk.post.dto.req.ReqPostDto;
 import com.goalmokgil.gmk.post.dto.res.ResPostDto;
+import com.goalmokgil.gmk.post.entity.Likes;
 import com.goalmokgil.gmk.post.entity.Post;
 import com.goalmokgil.gmk.post.entity.Tag;
 import com.goalmokgil.gmk.post.repository.PostRepository;
+import com.goalmokgil.gmk.post.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.relational.core.sql.Like;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +32,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final CourseRepository courseRepository;
     private final MemberRepository memberRepository;
+    private final TagRepository tagRepository;
     private final TagService tagService;
 
     // Post 조회
@@ -46,8 +50,11 @@ public class PostService {
 
 
     // Post 생성
+    @Transactional
     public Post createPost(PostDto postDto) {
         // 사용자 정보 조회
+        log.info("start create post");
+        log.info("postDto: " + postDto);
         Member member = memberRepository.findById(postDto.getUserId())
                 .orElseThrow(() -> new RuntimeException("Member not found"));
 
@@ -55,17 +62,28 @@ public class PostService {
         Course course = courseRepository.findById(postDto.getUserId())
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
+        List<Tag> tags = new ArrayList<>();
+        //List<Likes> likes = new ArrayList<>();
+        //likes.add(new Likes());
+        for (String tagName : postDto.getTags()) {
+            tags.add(tagRepository.save(new Tag(tagName)));
+        }
+
         // 새로운 Post 객체 생성 및 저장
-        Post post = new Post(postDto, course, member);
+        Post post = new Post(postDto, course, member, tags);
+
+        log.info("new post: "+ post);
 
         return postRepository.save(post);
     }
 
 
+    @Transactional
     public Post updatePost(Long postId, PostDto postDto) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
+        log.info("postDto title:" + postDto.getTitle());
         Post newPost = new Post(post, postDto);
 
         return postRepository.save(newPost);
