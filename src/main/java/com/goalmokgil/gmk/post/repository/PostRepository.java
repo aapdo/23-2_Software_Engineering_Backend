@@ -9,5 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
+    List<Post> findByTags_Name(String tagName); // 태그 이름으로 포스트 찾기
 
 }
