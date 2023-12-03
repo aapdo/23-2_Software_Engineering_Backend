@@ -14,6 +14,7 @@ import com.goalmokgil.gmk.post.repository.PostRepository;
 import com.goalmokgil.gmk.post.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.SessionFactory;
 import org.springframework.data.relational.core.sql.Like;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +34,6 @@ public class PostService {
     private final CourseRepository courseRepository;
     private final MemberRepository memberRepository;
     private final TagRepository tagRepository;
-    private final TagService tagService;
 
     // Post 조회
     @Transactional(readOnly = true)
@@ -51,11 +51,11 @@ public class PostService {
 
     // Post 생성
     @Transactional
-    public Post createPost(PostDto postDto) {
+    public Post createPost(Long userId, PostDto postDto) {
         // 사용자 정보 조회
         log.info("start create post");
         log.info("postDto: " + postDto);
-        Member member = memberRepository.findById(postDto.getUserId())
+        Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
 
         // 코스 정보 조회 및 설정
@@ -63,18 +63,19 @@ public class PostService {
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
         List<Tag> tags = new ArrayList<>();
-        //List<Likes> likes = new ArrayList<>();
-        //likes.add(new Likes());
+
         for (String tagName : postDto.getTags()) {
             tags.add(tagRepository.save(new Tag(tagName)));
         }
 
+
         // 새로운 Post 객체 생성 및 저장
-        Post post = new Post(postDto, course, member, tags);
+        Post newPost = new Post(postDto, course, member, tags);
 
-        log.info("new post: "+ post);
 
-        return postRepository.save(post);
+        log.info("new post: "+ newPost);
+
+        return postRepository.save(newPost);
     }
 
 

@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "courses")
+@ToString(exclude = {"courses", "posts", "likes"})
 @EqualsAndHashCode
 public class Member {
 
@@ -43,7 +43,7 @@ public class Member {
     @JsonIgnore // 참조 무한재귀 방지용
     private List<Course> courses;
 
-    @OneToMany( cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Post> posts;
 

@@ -39,11 +39,11 @@ public class PostDto {
     public PostDto(Post post) {
         this.postId = post.getPostId();
         this.courseId = post.getRelatedCourse().getCourseId();
-        this.userId = post.getAuthor().getUserId();
-        this.authorName = post.getAuthor().getName();
-        this.authorNickName = post.getAuthor().getNickname();
-        this.email = post.getAuthor().getEmail();
-        this.loginId = post.getAuthor().getLoginId();
+        this.userId = post.getMember().getUserId();
+        this.authorName = post.getMember().getName();
+        this.authorNickName = post.getMember().getNickname();
+        this.email = post.getMember().getEmail();
+        this.loginId = post.getMember().getLoginId();
         this.postData = post.getPostData();
         this.createdDate = post.getCreatedDate();
         this.modifiedDate = post.getModifiedDate();

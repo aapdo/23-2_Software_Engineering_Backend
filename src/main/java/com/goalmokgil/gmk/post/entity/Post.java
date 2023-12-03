@@ -1,6 +1,5 @@
 package com.goalmokgil.gmk.post.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.goalmokgil.gmk.account.entity.Member;
@@ -9,10 +8,7 @@ import com.goalmokgil.gmk.post.dto.PostDto;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -30,9 +26,10 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private Member author;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @NotNull
+    @JoinColumn(name = "userId", unique = false)
+    private Member member;
 
     // one to one으로 수정
     @OneToOne // (mappedBy = "post") 삭제
@@ -73,10 +70,9 @@ public class Post {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private Date modifiedDate;
 
-
     public Post(PostDto postDto, Course course, Member member, List<Tag> tags) {
         this.relatedCourse = course;
-        this.author = member;
+        this.member = member;
         this.title = postDto.getTitle();
         this.postData = postDto.getPostData();
         this.tags = tags;
@@ -87,7 +83,7 @@ public class Post {
     }
     public Post(PostDto postDto, Course course, Member member, List<Tag> tags, List<Likes> likes) {
         this.relatedCourse = course;
-        this.author = member;
+        this.member = member;
         this.title = postDto.getTitle();
         this.postData = postDto.getPostData();
         this.tags = tags;
@@ -98,7 +94,7 @@ public class Post {
     }
     public Post(Post post, PostDto postDto){
         this.postId = post.getPostId();
-        this.author = post.getAuthor();
+        this.member = post.getMember();
         this.relatedCourse = post.getRelatedCourse();
         this.title = postDto.getTitle();
         this.postData = postDto.getPostData();

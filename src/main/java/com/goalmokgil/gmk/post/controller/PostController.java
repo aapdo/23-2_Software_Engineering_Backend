@@ -1,5 +1,6 @@
 package com.goalmokgil.gmk.post.controller;
 
+import com.goalmokgil.gmk.account.service.TokenService;
 import com.goalmokgil.gmk.post.dto.PostDto;
 import com.goalmokgil.gmk.post.dto.req.ReqPostDto;
 import com.goalmokgil.gmk.post.dto.res.ResPostDto;
@@ -22,6 +23,7 @@ public class PostController {
 
     private final PostService postService;
     private final LikeService likeService;
+    private final TokenService tokenService;
 
     // 특정 게시글 조회
     // Post => PostDto
@@ -45,8 +47,9 @@ public class PostController {
 
     // 게시글 만들기
     @PostMapping
-    public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
-        return ResponseEntity.ok(new PostDto(postService.createPost(postDto)));
+    public ResponseEntity<PostDto> createPost(@RequestHeader("Authorization") String authorizationHeader, @RequestBody PostDto postDto) {
+        Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);
+        return ResponseEntity.ok(new PostDto(postService.createPost(userId, postDto)));
     }
 
     // 게시글 수정
