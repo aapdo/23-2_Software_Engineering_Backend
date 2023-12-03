@@ -37,9 +37,9 @@ public class Course {
     @JoinColumn(name = "userId")
     private Member member;
 
-    @ManyToOne
-    @JoinColumn(name = "postId")
-    private Post post;
+//    @ManyToOne
+//    @JoinColumn(name = "postId")
+//    private Post post;
 
     @Type(JsonType.class)
     @Column(name = "courseData", columnDefinition = "longtext")
