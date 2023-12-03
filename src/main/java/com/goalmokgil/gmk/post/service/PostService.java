@@ -83,4 +83,11 @@ public class PostService {
     public List<Post> findPostsByTagName(String tagName) {
         return postRepository.findByTags_Name(tagName);
     }
+
+
+    // 포스트 좋아요 순으로 정렬
+    @Transactional(readOnly = true)
+    public List<Post> getAllPostsSortedByLikes() {
+        return postRepository.findAllPostsOrderByLikes();
+    }
 }
