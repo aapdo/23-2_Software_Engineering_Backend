@@ -3,7 +3,6 @@ package com.goalmokgil.gmk.post.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.goalmokgil.gmk.account.entity.Member;
-import com.goalmokgil.gmk.course.entity.Course;
 import com.goalmokgil.gmk.post.dto.PostDto;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
@@ -20,7 +19,7 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = "relatedCourse")
+@ToString
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,9 +30,8 @@ public class Post {
     @JoinColumn(name = "userId", unique = false)
     private Member member;
 
-    // one to one으로 수정
-    @OneToOne // (mappedBy = "post") 삭제
-    private Course relatedCourse;
+    // 동시성 문제로 Course => courseId로 수정
+    private Long courseId;
 
     @NotNull
     private String title;
@@ -70,8 +68,8 @@ public class Post {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private Date modifiedDate;
 
-    public Post(PostDto postDto, Course course, Member member, List<Tag> tags) {
-        this.relatedCourse = course;
+    public Post(PostDto postDto, Long courseId, Member member, List<Tag> tags) {
+        this.courseId = courseId;
         this.member = member;
         this.title = postDto.getTitle();
         this.postData = postDto.getPostData();
@@ -81,8 +79,8 @@ public class Post {
         this.createdDate = postDto.getCreatedDate();
         this.modifiedDate = postDto.getModifiedDate();
     }
-    public Post(PostDto postDto, Course course, Member member, List<Tag> tags, List<Likes> likes) {
-        this.relatedCourse = course;
+    public Post(PostDto postDto, Long courseId, Member member, List<Tag> tags, List<Likes> likes) {
+        this.courseId = courseId;
         this.member = member;
         this.title = postDto.getTitle();
         this.postData = postDto.getPostData();
@@ -95,7 +93,7 @@ public class Post {
     public Post(Post post, PostDto postDto){
         this.postId = post.getPostId();
         this.member = post.getMember();
-        this.relatedCourse = post.getRelatedCourse();
+        this.courseId = post.getCourseId();
         this.title = postDto.getTitle();
         this.postData = postDto.getPostData();
         this.tags = post.getTags();

@@ -38,7 +38,7 @@ public class PostDto {
 
     public PostDto(Post post) {
         this.postId = post.getPostId();
-        this.courseId = post.getRelatedCourse().getCourseId();
+        this.courseId = post.getCourseId();
         this.userId = post.getMember().getUserId();
         this.authorName = post.getMember().getName();
         this.authorNickName = post.getMember().getNickname();

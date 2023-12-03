@@ -5,24 +5,17 @@ import com.goalmokgil.gmk.account.repository.MemberRepository;
 import com.goalmokgil.gmk.course.entity.Course;
 import com.goalmokgil.gmk.course.repository.CourseRepository;
 import com.goalmokgil.gmk.post.dto.PostDto;
-import com.goalmokgil.gmk.post.dto.req.ReqPostDto;
-import com.goalmokgil.gmk.post.dto.res.ResPostDto;
-import com.goalmokgil.gmk.post.entity.Likes;
 import com.goalmokgil.gmk.post.entity.Post;
 import com.goalmokgil.gmk.post.entity.Tag;
 import com.goalmokgil.gmk.post.repository.PostRepository;
 import com.goalmokgil.gmk.post.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.SessionFactory;
-import org.springframework.data.relational.core.sql.Like;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -59,7 +52,7 @@ public class PostService {
                 .orElseThrow(() -> new RuntimeException("Member not found"));
 
         // 코스 정보 조회 및 설정
-        Course course = courseRepository.findById(postDto.getUserId())
+        Course course = courseRepository.findById(postDto.getCourseId())
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
         List<Tag> tags = new ArrayList<>();
@@ -70,7 +63,7 @@ public class PostService {
 
 
         // 새로운 Post 객체 생성 및 저장
-        Post newPost = new Post(postDto, course, member, tags);
+        Post newPost = new Post(postDto, course.getCourseId(), member, tags);
 
 
         log.info("new post: "+ newPost);
