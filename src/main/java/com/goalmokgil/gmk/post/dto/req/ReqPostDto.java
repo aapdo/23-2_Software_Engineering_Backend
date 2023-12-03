@@ -1,5 +1,6 @@
 package com.goalmokgil.gmk.post.dto.req;
 
+import com.goalmokgil.gmk.post.entity.Tag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,5 +16,7 @@ public class ReqPostDto {
     private Set<Long> courseIds; // 관련 코스의 ID들
     private String title; // 게시글 제목
     private String content; // 게시글 내용
+    private Set<String> tags; // 태그 정보
+
 //    private CourseData courseData;
 }
