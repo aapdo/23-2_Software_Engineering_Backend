@@ -2,7 +2,6 @@ package com.goalmokgil.gmk.account.controller;
 
 
 import com.goalmokgil.gmk.account.dto.req.ReqMemberDto;
-import com.goalmokgil.gmk.account.entity.Member;
 import com.goalmokgil.gmk.account.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

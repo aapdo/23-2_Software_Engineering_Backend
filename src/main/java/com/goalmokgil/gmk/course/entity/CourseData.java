@@ -7,7 +7,6 @@ import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Getter
 @Setter
@@ -15,9 +14,10 @@ import java.util.Map;
 @ToString
 public class CourseData {
     private String courseTitle;
-    private List<Place> courseContent = new ArrayList<>();
+    //private List<Place> courseContent = new ArrayList<>();
+    private List< List<Place> > courseContent = new ArrayList<List<Place>>();
 
-    public void addPlace(Place place) {
+    public void addPlace(List<Place> place) {
         courseContent.add(place);
     }
 }

@@ -1,5 +1,6 @@
 package com.goalmokgil.gmk.course.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.goalmokgil.gmk.course.entity.Course;
 import com.goalmokgil.gmk.course.entity.CourseData;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,9 @@ public class CourseDto {
     private Long courseId;
     private Long userId;
     private CourseData courseData;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifiedDate;
 
     public CourseDto(Course course) {
