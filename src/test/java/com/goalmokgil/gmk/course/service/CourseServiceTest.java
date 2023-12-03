@@ -108,7 +108,9 @@ public class CourseServiceTest {
         place.setPlaceId(1L);
         place.setDate(new Date());
         CourseData courseData = new CourseData();
-        courseData.addPlace(place);
+        List<Place> places = new ArrayList<>();
+        places.add(place);
+        courseData.addPlace(places);
         courseData.setCourseTitle("test title");
 
         Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);

@@ -14,8 +14,10 @@ import java.util.List;
 @ToString
 public class CourseData {
     private String courseTitle;
-    private List<Place> courseContent = new ArrayList<>();
-    public void addPlace(Place place) {
+    //private List<Place> courseContent = new ArrayList<>();
+    private List< List<Place> > courseContent = new ArrayList<List<Place>>();
+
+    public void addPlace(List<Place> place) {
         courseContent.add(place);
     }
 }
