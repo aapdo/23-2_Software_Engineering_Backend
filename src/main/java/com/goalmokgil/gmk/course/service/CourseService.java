@@ -38,13 +38,13 @@ public class CourseService   {
         Optional<Course> courseByCourseId = courseRepository.findById(courseId);
         Course course = courseByCourseId.orElseThrow(EntityNotFoundException::new);
         // 삭제된 코스일 경우
-        if (course.getDeletedDate() == null) {
-            throw new ForbiddenException("잘못된 접근입니다.", HttpStatus.FORBIDDEN);
+        if (course.getDeletedDate() != null) {
+            throw new ForbiddenException("해당 코스는 삭제되었습니다.", HttpStatus.FORBIDDEN);
         }
         if (course.getMember().getUserId().equals(userId)) {
             return course;
         } else {
-            throw new ForbiddenException("잘못된 접근입니다.", HttpStatus.FORBIDDEN);
+            throw new ForbiddenException("해당 코스에 대한 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
     }
 
@@ -91,7 +91,7 @@ public class CourseService   {
                 () -> new EntityNotFoundException("잘못된 계정 정보입니다."));
 
         if (!existingCourse.getMember().equals(member)) {
-            throw new ForbiddenException("잘못된 접근입니다.", HttpStatus.FORBIDDEN);
+            throw new ForbiddenException("해당 코스에 대한 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
         existingCourse.updateCourse(updatedCourseDto);
 
@@ -106,7 +106,7 @@ public class CourseService   {
         Course course = courseRepository.findById(courseDto.getCourseId())
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 Course입니다."));
         if (!course.getMember().equals(member)) {
-            throw new ForbiddenException("잘못된 접근입니다.", HttpStatus.FORBIDDEN);
+            throw new ForbiddenException("해당 코스에 대한 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
         course.setDeletedDate(new Date());
 
