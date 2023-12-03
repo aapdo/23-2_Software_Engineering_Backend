@@ -56,10 +56,17 @@ public class PostController {
     }
 
 
-    // 특정 포스트의 '좋아요' 개수를 반환하는 엔드포인트
+    // 포스트의 좋아요 개수 반환
     @GetMapping("/{postId}/likes/count")
     public ResponseEntity<?> countLikes(@PathVariable Long postId) {
         long likeCount = likeService.countLikesByPost(postId);
         return ResponseEntity.ok(Collections.singletonMap("likeCount", likeCount));
+    }
+
+    // 태그로 포스트 검색하기
+    @GetMapping("/by-tag/{tagName}")
+    public ResponseEntity<List<Post>> getPostsByTag(@PathVariable String tagName) {
+        List<Post> posts = postService.findPostsByTagName(tagName);
+        return ResponseEntity.ok(posts);
     }
 }
