@@ -81,4 +81,12 @@ public class PostController {
         }
         return ResponseEntity.ok(postDtos);
     }
+
+
+    // 좋아요 순으로 포스트 정렬
+    @GetMapping("/orderBy-likes")
+    public ResponseEntity<List<Post>> getPostsSortedByLikes() {
+        List<Post> sortedPosts = postService.getAllPostsSortedByLikes();
+        return ResponseEntity.ok(sortedPosts);
+    }
 }
