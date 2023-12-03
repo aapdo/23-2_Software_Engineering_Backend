@@ -19,7 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "relatedCourses")
 public class Post {
 
     @Id
@@ -38,7 +38,7 @@ public class Post {
     @NotNull
     private String title;
     @NotNull
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT") // 내용을 늘려줌
     private String content;
     @CreatedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")

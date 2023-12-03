@@ -1,6 +1,7 @@
 package com.goalmokgil.gmk.post.controller;
 
-import com.goalmokgil.gmk.post.dto.PostDto;
+import com.goalmokgil.gmk.post.dto.req.ReqPostDto;
+import com.goalmokgil.gmk.post.dto.res.ResPostDto;
 import com.goalmokgil.gmk.post.entity.Post;
 import com.goalmokgil.gmk.post.service.LikeService;
 import com.goalmokgil.gmk.post.service.PostService;
@@ -35,15 +36,15 @@ public class PostController {
 
     // 게시글 만들기
     @PostMapping
-    public ResponseEntity<Post> createPost(@RequestBody PostDto postDto) {
-        Post createdPost = postService.createPost(postDto);
-        return ResponseEntity.ok(createdPost);
+    public ResponseEntity<ResPostDto> createPost(@RequestBody ReqPostDto reqPostDto) {
+        ResPostDto resPostDto = postService.createPost(reqPostDto);
+        return ResponseEntity.ok(resPostDto);
     }
 
     // 게시글 수정
     @PutMapping("/{postId}")
-    public ResponseEntity<Post> updatePost(@PathVariable Long postId, @RequestBody PostDto postDto) {
-        Post updatedPost = postService.updatePost(postId, postDto);
+    public ResponseEntity<Post> updatePost(@PathVariable Long postId, @RequestBody ReqPostDto reqPostDto) {
+        Post updatedPost = postService.updatePost(postId, reqPostDto);
         return ResponseEntity.ok(updatedPost);
     }
 

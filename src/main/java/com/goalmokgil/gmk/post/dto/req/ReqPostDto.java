@@ -1,18 +1,15 @@
-package com.goalmokgil.gmk.post.dto;
+package com.goalmokgil.gmk.post.dto.req;
 
-import com.goalmokgil.gmk.course.entity.CourseData;
-import com.goalmokgil.gmk.post.entity.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class PostDto {
+public class ReqPostDto {
 
     private Long memberId; // 게시글을 작성한 사용자의 ID
     private Set<Long> courseIds; // 관련 코스의 ID들
