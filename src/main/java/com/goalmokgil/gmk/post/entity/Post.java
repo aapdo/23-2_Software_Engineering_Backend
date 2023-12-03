@@ -4,12 +4,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.goalmokgil.gmk.account.entity.Member;
 import com.goalmokgil.gmk.course.entity.Course;
+import com.goalmokgil.gmk.post.dto.PostDto;
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -22,7 +25,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = "relatedCourses")
+@ToString(exclude = "relatedCourse")
 public class Post {
 
     @Id
@@ -31,8 +34,9 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "userId")
     private Member author;
-    @OneToMany // (mappedBy = "post") 삭제
-    private List<Course> relatedCourses;
+    // one to one으로 수정
+    @OneToOne // (mappedBy = "post") 삭제
+    private Course relatedCourse;
     @OneToMany
     private List<Likes> likes;
     
@@ -50,9 +54,12 @@ public class Post {
 
     @NotNull
     private String title;
+
+    @Type(JsonType.class)
     @NotNull
-    @Column(columnDefinition = "TEXT") // 내용을 늘려줌
-    private String content;
+    @Column(name = "postData", columnDefinition = "TEXT")
+    private PostData postData;
+
     @CreatedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private Date createdDate;
@@ -61,14 +68,22 @@ public class Post {
     private Date modifiedDate;
 
 
-    public Post(Member author, List<Course> relatedCourses, List<Likes> likes, Set<Tag> tags, String title, String content, Date createdDate, Date modifiedDate) {
-        this.author = author;
-        this.relatedCourses = relatedCourses;
-        this.likes = likes;
-        this.tags = tags;
-        this.title = title;
-        this.content = content;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
+    public Post(PostDto postDto, Course course, Member member) {
+        this.relatedCourse = course;
+        this.author = member;
+        this.title = postDto.getTitle();
+        this.postData = postDto.getPostData();
+        this.tags = postDto.getTags();
+        this.likes = postDto.getLikes();
+    }
+    public Post(Post post, PostDto postDto){
+        this.postId = post.getPostId();
+        this.author = post.getAuthor();
+        this.relatedCourse = post.getRelatedCourse();
+
+        this.title = postDto.getTitle();
+        this.postData = postDto.getPostData();
+        this.tags = postDto.getTags();
+        this.likes = postDto.getLikes();
     }
 }

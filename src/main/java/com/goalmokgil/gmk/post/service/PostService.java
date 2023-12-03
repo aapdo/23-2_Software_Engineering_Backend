@@ -4,6 +4,7 @@ import com.goalmokgil.gmk.account.entity.Member;
 import com.goalmokgil.gmk.account.repository.MemberRepository;
 import com.goalmokgil.gmk.course.entity.Course;
 import com.goalmokgil.gmk.course.repository.CourseRepository;
+import com.goalmokgil.gmk.post.dto.PostDto;
 import com.goalmokgil.gmk.post.dto.req.ReqPostDto;
 import com.goalmokgil.gmk.post.dto.res.ResPostDto;
 import com.goalmokgil.gmk.post.entity.Post;
@@ -45,60 +46,29 @@ public class PostService {
 
 
     // Post 생성
-    public ResPostDto createPost(ReqPostDto reqPostDto) {
+    public Post createPost(PostDto postDto) {
         // 사용자 정보 조회
-        Member member = memberRepository.findById(reqPostDto.getMemberId())
+        Member member = memberRepository.findById(postDto.getUserId())
                 .orElseThrow(() -> new RuntimeException("Member not found"));
 
         // 코스 정보 조회 및 설정
-        List<Course> courses = new ArrayList<>(); // List 초기화
-        for (Long courseId : reqPostDto.getCourseIds()) {
-            Course course = courseRepository.findById(courseId)
-                    .orElseThrow(() -> new RuntimeException("Course not found"));
-            courses.add(course);
-        }
+        Course course = courseRepository.findById(postDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("Course not found"));
 
         // 새로운 Post 객체 생성 및 저장
-        Post post = new Post();
-        post.setAuthor(member);
-        post.setRelatedCourses(courses); // 관련 코스 설정
-        post.setTitle(reqPostDto.getTitle());
-        post.setContent(reqPostDto.getContent());
+        Post post = new Post(postDto, course, member);
 
-        // 태그 정보 설정
-        Set<Tag> tags = reqPostDto.getTags().stream()
-                .map(tagName -> tagService.createOrGetTag(tagName))
-                .collect(Collectors.toSet());
-        post.setTags(tags);
-        postRepository.save(post);
-
-
-        ResPostDto resPostDto = new ResPostDto();
-        resPostDto.setPostId(post.getPostId()); // 포스트 고유번호
-        resPostDto.setAuthorName(post.getAuthor().getName()); // 만든 사람 이름
-        resPostDto.setAuthorNickname(post.getAuthor().getNickname()); // 만든 사람 닉네임
-        resPostDto.setCourseList(post.getRelatedCourses()); // 포스트 내 코스들
-
-        resPostDto.setTitle(post.getTitle()); // 제목
-        resPostDto.setContent(post.getContent()); // 내용
-        resPostDto.setCreatedDate(post.getCreatedDate()); // 만든날짜
-        resPostDto.setModifiedDate(post.getModifiedDate()); // 수정시간
-        resPostDto.setTags(post.getTags()); // 태그
-
-        return resPostDto;
+        return postRepository.save(post);
     }
 
 
-    // 게시글 수정하기 - 미완성 미완성 12.03.
-    public Post updatePost(Long postId, ReqPostDto reqPostDto) {
+    public Post updatePost(Long postId, PostDto postDto) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
-        post.setTitle(reqPostDto.getTitle());
-        post.setContent(reqPostDto.getContent());
-        // 필요한 경우 다른 필드도 업데이트
+        Post newPost = new Post(post, postDto);
 
-        return postRepository.save(post);
+        return postRepository.save(newPost);
     }
 
     // 게시글 삭제하기
