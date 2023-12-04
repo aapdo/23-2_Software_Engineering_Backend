@@ -8,6 +8,7 @@ import com.goalmokgil.gmk.post.entity.Post;
 import com.goalmokgil.gmk.post.service.LikeService;
 import com.goalmokgil.gmk.post.service.PostService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/post")
 @RequiredArgsConstructor
+@Slf4j
 public class PostController {
 
     private final PostService postService;
@@ -30,6 +32,7 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity<PostDto> getPost(@PathVariable Long postId) {
         Post post = postService.getPost(postId);
+        log.info("get post: " + post);
         return ResponseEntity.ok(new PostDto(post));
     }
 

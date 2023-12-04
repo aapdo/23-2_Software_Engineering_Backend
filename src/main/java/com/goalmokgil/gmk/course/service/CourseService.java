@@ -28,9 +28,6 @@ public class CourseService   {
     private final CourseRepository courseRepository;
     private final MemberRepository memberRepository;
     private final TokenService tokenService;
-    public void test(){
-        System.out.println(tokenService.getCurrentUserId("123"));
-    }
 
     // member id, course id로 해당 코스를 조회하고 리턴함.
     // 없을 경우 빈 코스 템플릿을 생성하고 db에 저장 후 리턴.

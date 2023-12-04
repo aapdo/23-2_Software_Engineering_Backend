@@ -33,9 +33,13 @@ public class LikeService {
 
         Optional<Likes> existingLike = likeRepository.findByMemberAndPost(member, post);
 
+        log.info("post.likes: " + post.getLikes());
+
         if (existingLike.isPresent()) {
             // 이미 '좋아요'가 있으면 제거
             likeRepository.delete(existingLike.get());
+            log.info("post.likes: " + post.getLikes());
+
             return false; // '좋아요' 제거됨
         }
         else { // '좋아요'가 없으면 추가
@@ -43,6 +47,7 @@ public class LikeService {
             likes.setMember(member);
             likes.setPost(post);
             likeRepository.save(likes);
+            log.info("post.likes" + post.getLikes());
             return true; // '좋아요' 추가됨
         }
     }
