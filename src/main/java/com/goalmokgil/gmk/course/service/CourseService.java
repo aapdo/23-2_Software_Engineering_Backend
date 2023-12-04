@@ -35,7 +35,7 @@ public class CourseService   {
         Optional<Course> courseByCourseId = courseRepository.findById(courseId);
         Course course = courseByCourseId.orElseThrow(EntityNotFoundException::new);
         // 삭제된 코스일 경우
-        if (course.getDeletedDate() == null) {
+        if (course.getDeletedDate() != null) {
             throw new ForbiddenException("해당 코스는 삭제되었습니다.", HttpStatus.FORBIDDEN);
         }
         if (course.getMember().getUserId().equals(userId)) {
@@ -65,7 +65,7 @@ public class CourseService   {
         log.info("request create userId = " + userId);
         // course Dto에 저장된 userId와 로그인 토큰에 저장된 아이디가 다른 경우
         if (!userId.equals(courseDto.getUserId())) {
-            //throw new EntityNotFoundException("잘못된 계정 정보입니다.");
+            throw new EntityNotFoundException("잘못된 계정 정보입니다.");
         }
         // 해당 member가 존재하지 않는 경우
         Member member = memberRepository.findById(userId).orElseThrow(

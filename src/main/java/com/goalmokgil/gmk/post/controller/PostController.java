@@ -57,14 +57,16 @@ public class PostController {
 
     // 게시글 수정
     @PutMapping("/{postId}")
-    public ResponseEntity<PostDto> updatePost(@PathVariable Long postId, @RequestBody PostDto postDto) {
-        return ResponseEntity.ok(new PostDto(postService.updatePost(postId, postDto)));
+    public ResponseEntity<PostDto> updatePost(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long postId, @RequestBody PostDto postDto) {
+        Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);
+        return ResponseEntity.ok(new PostDto(postService.updatePost(userId, postId, postDto)));
     }
 
     // 게시글 삭제
     @DeleteMapping("/{postId}")
-    public ResponseEntity<?> deletePost(@PathVariable Long postId) {
-        postService.deletePost(postId);
+    public ResponseEntity<?> deletePost(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long postId) {
+        Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);
+        postService.deletePost(userId, postId);
         return ResponseEntity.ok().build();
     }
 

@@ -4,6 +4,8 @@ import com.goalmokgil.gmk.account.entity.Member;
 import com.goalmokgil.gmk.account.repository.MemberRepository;
 import com.goalmokgil.gmk.course.entity.Course;
 import com.goalmokgil.gmk.course.repository.CourseRepository;
+import com.goalmokgil.gmk.exception.EntityNotFoundException;
+import com.goalmokgil.gmk.exception.ForbiddenException;
 import com.goalmokgil.gmk.post.dto.PostDto;
 import com.goalmokgil.gmk.post.entity.Post;
 import com.goalmokgil.gmk.post.entity.Tag;
@@ -11,6 +13,7 @@ import com.goalmokgil.gmk.post.repository.PostRepository;
 import com.goalmokgil.gmk.post.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,21 +76,34 @@ public class PostService {
 
 
     @Transactional
-    public Post updatePost(Long postId, PostDto postDto) {
+    public Post updatePost(Long userId, Long postId, PostDto postDto) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
+        Member member = memberRepository.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("잘못된 계정 정보입니다."));
 
-        log.info("postDto title:" + postDto.getTitle());
-        Post newPost = new Post(post, postDto);
-
-        return postRepository.save(newPost);
+        if (member.getUserId().equals(post.getMember().getUserId())) {
+            log.info("postDto title:" + postDto.getTitle());
+            Post newPost = new Post(post, postDto);
+            return postRepository.save(newPost);
+        } else {
+            throw new ForbiddenException("해당 포스트에 대한 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
     }
 
     // 게시글 삭제하기
-    public void deletePost(Long postId) {
-        postRepository.findById(postId)
+    public void deletePost(Long userId, Long postId) {
+        Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
-        postRepository.deleteById(postId);
+
+        Member member = memberRepository.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("잘못된 계정 정보입니다."));
+
+        if (member.getUserId().equals(post.getMember().getUserId())) {
+            postRepository.deleteById(postId);
+        } else {
+            throw new ForbiddenException("해당 포스트에 대한 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
     }
 
 
