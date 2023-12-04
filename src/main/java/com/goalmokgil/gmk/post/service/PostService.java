@@ -64,7 +64,7 @@ public class PostService {
 
         // 새로운 Post 객체 생성 및 저장
         Post newPost = new Post(postDto, course.getCourseId(), member, tags);
-
+        member.getPosts().add(newPost);
 
         log.info("new post: "+ newPost);
 

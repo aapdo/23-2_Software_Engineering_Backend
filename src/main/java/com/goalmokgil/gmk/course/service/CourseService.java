@@ -35,7 +35,7 @@ public class CourseService   {
         Optional<Course> courseByCourseId = courseRepository.findById(courseId);
         Course course = courseByCourseId.orElseThrow(EntityNotFoundException::new);
         // 삭제된 코스일 경우
-        if (course.getDeletedDate() != null) {
+        if (course.getDeletedDate() == null) {
             throw new ForbiddenException("해당 코스는 삭제되었습니다.", HttpStatus.FORBIDDEN);
         }
         if (course.getMember().getUserId().equals(userId)) {
@@ -48,12 +48,15 @@ public class CourseService   {
     public List<CourseDto> getAllCourseByMemberId(Long userId){
         Member member = memberRepository.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException("잘못된 계정 정보입니다."));
+        log.info("member: " + member);
         ArrayList<CourseDto> result = new ArrayList<>();
         for (Course course : member.getCourses()) {
-            if (course.getDeletedDate() != null) {
+            if (course.getDeletedDate() == null) {
+                log.info("course by member: " + course);
                 result.add(new CourseDto(course));
             }
         }
+        log.info("result : " + result);
         return result;
     }
 
@@ -69,7 +72,7 @@ public class CourseService   {
                 () -> new EntityNotFoundException("잘못된 계정 정보입니다."));
         // You can use the userId or other information from the token to set properties of the new course
         Course newCourse = new Course(courseDto, member);
-
+        member.getCourses().add(newCourse);
         courseRepository.save(newCourse);
         return newCourse;
     }

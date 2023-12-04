@@ -37,6 +37,9 @@ public class LikeService {
 
         if (existingLike.isPresent()) {
             // 이미 '좋아요'가 있으면 제거
+            member.getLikes().remove(existingLike.get());
+            post.getLikes().remove(existingLike.get());
+
             likeRepository.delete(existingLike.get());
             log.info("post.likes: " + post.getLikes());
 
@@ -46,6 +49,10 @@ public class LikeService {
             Likes likes = new Likes();
             likes.setMember(member);
             likes.setPost(post);
+
+            member.getLikes().add(likes);
+            post.getLikes().add(likes);
+
             likeRepository.save(likes);
             log.info("post.likes" + post.getLikes());
             return true; // '좋아요' 추가됨
