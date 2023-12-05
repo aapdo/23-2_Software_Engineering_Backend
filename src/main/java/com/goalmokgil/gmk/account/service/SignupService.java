@@ -21,7 +21,18 @@ public class SignupService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public Member memberSignup(ReqSignupDto reqSignupDto) {
+
+        if (isIdDuplicate(reqSignupDto.getLoginId())) {
+            throw new RuntimeException("중복된 ID입니다.");
+        }
+
+        // 닉네임 중복 체크
+        if (isNicknameDuplicate(reqSignupDto.getNickname())) {
+            throw new RuntimeException("중복된 닉네임입니다.");
+        }
+
         Member member = Member.builder()
                 .loginId(reqSignupDto.getLoginId())
                 .password(passwordEncoder.encode(reqSignupDto.getPassword()))
