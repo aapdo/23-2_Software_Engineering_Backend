@@ -24,18 +24,21 @@ public class CourseController {
     @PostMapping("/create")
     public ResponseEntity<CourseDto> createNewCourse(@RequestHeader("Authorization") String authorizationHeader, @RequestBody CourseDto courseDto) {
         Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);
+        log.info("create course, userId: {}", userId);
         return ResponseEntity.ok(new CourseDto(courseService.createNewCourse(userId, courseDto)));
     }
 
     @PostMapping("/update")
     public ResponseEntity<CourseDto> updateCourse(@RequestHeader("Authorization") String authorizationHeader, @RequestBody CourseDto courseDto) {
         Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);
+        log.info("update course, userId: {}", userId);
         return ResponseEntity.ok(new CourseDto(courseService.updateCourse(userId, courseDto)));
     }
 
     @PostMapping("/delete/{courseId}")
     public ResponseEntity<CourseDto> deleteCourse(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long courseId) {
         Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);
+        log.info("delete course, userId: {}", userId);
         return ResponseEntity.ok(new CourseDto(courseService.deleteCourse(userId, courseId)));
     }
 
@@ -43,6 +46,7 @@ public class CourseController {
     @GetMapping("view/{courseId}")
     public ResponseEntity<CourseDto> viewCourse(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long courseId) {
         Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);
+        log.info("view course, userId: {}", userId);
         return ResponseEntity.ok(new CourseDto(courseService.getCourseByCourseId(userId, courseId)));
     }
 
@@ -53,6 +57,7 @@ public class CourseController {
     @GetMapping("/myCourses")
     public ResponseEntity<List<CourseDto>> viewMyCourse(@RequestHeader("Authorization") String authorizationHeader) {
         Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);
+        log.info("view myCourse, userId: {}", userId);
         return ResponseEntity.ok(courseService.getAllCourseByMemberId(userId));
     }
 }
