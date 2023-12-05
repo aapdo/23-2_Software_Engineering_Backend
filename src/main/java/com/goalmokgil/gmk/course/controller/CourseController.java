@@ -33,10 +33,10 @@ public class CourseController {
         return ResponseEntity.ok(new CourseDto(courseService.updateCourse(userId, courseDto)));
     }
 
-    @PostMapping("/delete")
-    public ResponseEntity<CourseDto> deleteCourse(@RequestHeader("Authorization") String authorizationHeader, @RequestBody CourseDto courseDto) {
+    @PostMapping("/delete/{courseId}")
+    public ResponseEntity<CourseDto> deleteCourse(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long courseId) {
         Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);
-        return ResponseEntity.ok(new CourseDto(courseService.deleteCourse(userId, courseDto)));
+        return ResponseEntity.ok(new CourseDto(courseService.deleteCourse(userId, courseId)));
     }
 
 

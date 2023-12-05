@@ -34,7 +34,7 @@ public class CourseService   {
     public Course getCourseByCourseId(Long userId, Long courseId){
         Optional<Course> courseByCourseId = courseRepository.findById(courseId);
         Course course = courseByCourseId.orElseThrow(EntityNotFoundException::new);
-        // 삭제된 코스일 경우
+        // 삭제된 코스일 경우 null이 아님.
         if (course.getDeletedDate() != null) {
             throw new ForbiddenException("해당 코스는 삭제되었습니다.", HttpStatus.FORBIDDEN);
         }
@@ -51,6 +51,7 @@ public class CourseService   {
         log.info("member: " + member);
         ArrayList<CourseDto> result = new ArrayList<>();
         for (Course course : member.getCourses()) {
+            // null 이면 삭제되지 않은 상태.
             if (course.getDeletedDate() == null) {
                 log.info("course by member: " + course);
                 result.add(new CourseDto(course));
@@ -63,10 +64,6 @@ public class CourseService   {
     @Transactional
     public Course createNewCourse(Long userId, CourseDto courseDto) {
         log.info("request create userId = " + userId);
-        // course Dto에 저장된 userId와 로그인 토큰에 저장된 아이디가 다른 경우
-        if (!userId.equals(courseDto.getUserId())) {
-            throw new EntityNotFoundException("잘못된 계정 정보입니다.");
-        }
         // 해당 member가 존재하지 않는 경우
         Member member = memberRepository.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException("잘못된 계정 정보입니다."));
@@ -92,6 +89,10 @@ public class CourseService   {
         if (!existingCourse.getMember().equals(member)) {
             throw new ForbiddenException("해당 코스에 대한 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
+        // null이 아닌 경우 삭제된 상태임.
+        else if(existingCourse.getDeletedDate() != null){
+            throw new ForbiddenException("해당 코스는 삭제되었습니다.", HttpStatus.FORBIDDEN);
+        }
         existingCourse.updateCourse(updatedCourseDto);
 
         courseRepository.save(existingCourse);
@@ -99,10 +100,10 @@ public class CourseService   {
         return existingCourse;
     }
 
-    public Course deleteCourse(Long userId, CourseDto courseDto) {
+    public Course deleteCourse(Long userId, Long courseId) {
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("잘못된 계정 정보입니다."));
-        Course course = courseRepository.findById(courseDto.getCourseId())
+        Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 Course입니다."));
         if (!course.getMember().equals(member)) {
             throw new ForbiddenException("해당 코스에 대한 권한이 없습니다.", HttpStatus.FORBIDDEN);
