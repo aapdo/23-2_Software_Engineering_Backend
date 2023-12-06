@@ -4,11 +4,10 @@ import com.goalmokgil.gmk.account.entity.Member;
 import com.goalmokgil.gmk.account.repository.MemberRepository;
 import com.goalmokgil.gmk.post.entity.Likes;
 import com.goalmokgil.gmk.post.entity.Post;
-import com.goalmokgil.gmk.post.repository.LikeRepository;
+import com.goalmokgil.gmk.post.repository.LikesRepository;
 import com.goalmokgil.gmk.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.relational.core.sql.Like;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +21,7 @@ public class LikeService {
 
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
-    private final LikeRepository likeRepository;
+    private final LikesRepository likesRepository;
 
     @Transactional
     public boolean addLike(Long userId, Long postId) {
@@ -31,7 +30,7 @@ public class LikeService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
-        Optional<Likes> existingLike = likeRepository.findByMemberAndPost(member, post);
+        Optional<Likes> existingLike = likesRepository.findByMemberAndPost(member, post);
 
         log.info("post.likes: " + post.getLikes());
 
@@ -40,7 +39,7 @@ public class LikeService {
             member.getLikes().remove(existingLike.get());
             post.getLikes().remove(existingLike.get());
 
-            likeRepository.delete(existingLike.get());
+            likesRepository.delete(existingLike.get());
             log.info("post.likes: " + post.getLikes());
 
             return false; // '좋아요' 제거됨
@@ -53,7 +52,7 @@ public class LikeService {
             member.getLikes().add(likes);
             post.getLikes().add(likes);
 
-            likeRepository.save(likes);
+            likesRepository.save(likes);
             log.info("post.likes" + post.getLikes());
             return true; // '좋아요' 추가됨
         }
@@ -62,6 +61,6 @@ public class LikeService {
     public long countLikesByPost(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
-        return likeRepository.countByPost(post);
+        return likesRepository.countByPost(post);
     }
 }

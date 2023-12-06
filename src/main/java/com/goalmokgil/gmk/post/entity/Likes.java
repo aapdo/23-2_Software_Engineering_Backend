@@ -23,11 +23,11 @@ public class Likes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long likeId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "postId")
     @JsonBackReference
     private Post post;
