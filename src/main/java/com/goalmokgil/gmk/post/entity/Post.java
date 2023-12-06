@@ -40,6 +40,11 @@ public class Post {
     @JsonManagedReference
     @Nullable
     private List<Likes> likes;
+
+    // 좋아요 수를 반환하는 메소드
+    public int getLikesCount() {
+        return likes.size();
+    }
     
     // 태그 추가
     @ManyToMany

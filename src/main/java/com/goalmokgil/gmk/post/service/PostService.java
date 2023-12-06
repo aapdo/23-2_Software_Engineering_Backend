@@ -9,6 +9,7 @@ import com.goalmokgil.gmk.exception.ForbiddenException;
 import com.goalmokgil.gmk.post.dto.PostDto;
 import com.goalmokgil.gmk.post.entity.Post;
 import com.goalmokgil.gmk.post.entity.Tag;
+import com.goalmokgil.gmk.post.repository.LikesRepository;
 import com.goalmokgil.gmk.post.repository.PostRepository;
 import com.goalmokgil.gmk.post.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -30,6 +32,7 @@ public class PostService {
     private final CourseRepository courseRepository;
     private final MemberRepository memberRepository;
     private final TagRepository tagRepository;
+    private final LikesRepository likesRepository;
 
     // Post 조회
     @Transactional(readOnly = true)
@@ -114,8 +117,7 @@ public class PostService {
 
 
     // 포스트 좋아요 순으로 정렬
-    @Transactional(readOnly = true)
-    public List<Post> getAllPostsSortedByLikes() {
-        return postRepository.findAllPostsOrderByLikes();
+    public List<Post> getPostsOrderByLikes() {
+        return postRepository.findAllOrderByLikesDesc();
     }
 }
