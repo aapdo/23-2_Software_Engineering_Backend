@@ -2,6 +2,7 @@ package com.goalmokgil.gmk.account.dto.req;
 
 
 import com.goalmokgil.gmk.course.dto.CourseDto;
+import com.goalmokgil.gmk.post.dto.PostDto;
 import com.goalmokgil.gmk.post.dto.req.ReqPostDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,5 +20,5 @@ public class ReqMemberDto {
     private String birth;
     private String email;
     private List<CourseDto> courses;
-    private List<ReqPostDto> posts;
+    private List<PostDto> posts;
 }

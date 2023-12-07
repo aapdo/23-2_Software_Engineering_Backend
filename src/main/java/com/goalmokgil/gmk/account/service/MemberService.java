@@ -3,28 +3,42 @@ package com.goalmokgil.gmk.account.service;
 import com.goalmokgil.gmk.account.dto.req.ReqMemberDto;
 import com.goalmokgil.gmk.account.entity.Member;
 import com.goalmokgil.gmk.account.repository.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.goalmokgil.gmk.course.dto.CourseDto;
+import com.goalmokgil.gmk.course.service.CourseService;
+import com.goalmokgil.gmk.post.dto.PostDto;
+import com.goalmokgil.gmk.post.service.PostService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
+@Transactional(readOnly = true)
 public class MemberService {
-    @Autowired
-    private MemberRepository memberRepository;
+
+    private final MemberRepository memberRepository;
+    private final CourseService courseService;
+    private final PostService postService;
 
     public ReqMemberDto getMemberDetails(Long userId) {
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
 
-        ReqMemberDto reqMemberDto = new ReqMemberDto();
-        reqMemberDto.setLoginId(member.getLoginId());
-        reqMemberDto.setName(member.getName());
-        reqMemberDto.setNickname(member.getNickname());
-        reqMemberDto.setBirth(member.getBirth());
-        reqMemberDto.setEmail(member.getEmail());
-//        reqMemberDto.setCourses();
-//        reqMemberDto.setPosts();
+        List<CourseDto> courses = courseService.getAllCourseByMemberId(userId);
+        List<PostDto> posts = postService.getPostsByUser(userId);
 
-
-        return reqMemberDto;
+        return new ReqMemberDto(
+                member.getLoginId(),
+                member.getName(),
+                member.getNickname(),
+                member.getBirth(),
+                member.getEmail(),
+                courses,
+                posts
+        );
     }
 }
