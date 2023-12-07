@@ -49,6 +49,14 @@ public class PostController {
         return ResponseEntity.ok(postDtos);
     }
 
+    // 내 포스트 보기
+    @GetMapping("/myPosts")
+    public ResponseEntity<List<PostDto>> getMyPosts(@RequestHeader("Authorization") String authorizationHeader) {
+        Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);
+        List<PostDto> posts = postService.getPostsByUser(userId);
+        return ResponseEntity.ok(posts);
+    }
+
     // 게시글 만들기
     @PostMapping
     public ResponseEntity<PostDto> createPost(@RequestHeader("Authorization") String authorizationHeader, @RequestBody PostDto postDto) {

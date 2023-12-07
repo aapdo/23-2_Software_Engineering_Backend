@@ -32,7 +32,6 @@ public class PostService {
     private final CourseRepository courseRepository;
     private final MemberRepository memberRepository;
     private final TagRepository tagRepository;
-    private final LikesRepository likesRepository;
 
     // Post 조회
     @Transactional(readOnly = true)
@@ -45,6 +44,15 @@ public class PostService {
     @Transactional(readOnly = true)
     public List<Post> getAllPosts() {
         return postRepository.findAll();
+    }
+
+
+    // 내 포스트 보기
+    public List<PostDto> getPostsByUser(Long userId) {
+        List<Post> posts = postRepository.findByMemberUserId(userId);
+        return posts.stream()
+                .map(PostDto::new)
+                .collect(Collectors.toList());
     }
 
 

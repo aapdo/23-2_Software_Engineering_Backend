@@ -16,4 +16,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     // 좋아요 수에 따라 포스트를 정렬하여 반환하는 쿼리
     @Query("SELECT p FROM Post p LEFT JOIN p.likes l GROUP BY p ORDER BY COUNT(l) DESC")
     List<Post> findAllOrderByLikesDesc();
+
+    // 내 포스트 보기
+    List<Post> findByMemberUserId(Long userId);
+
 }
