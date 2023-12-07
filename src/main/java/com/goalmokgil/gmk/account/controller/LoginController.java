@@ -3,13 +3,12 @@ package com.goalmokgil.gmk.account.controller;
 import com.goalmokgil.gmk.account.dto.JwtLoginDto;
 import com.goalmokgil.gmk.account.dto.req.ReqLoginDto;
 import com.goalmokgil.gmk.account.service.LoginService;
-import com.goalmokgil.gmk.account.service.TokenService;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +21,7 @@ public class LoginController {
 
     @PostMapping("/login")
 
-    public ResponseEntity<JwtLoginDto> login(@RequestBody ReqLoginDto reqLoginDto) {
+    public ResponseEntity<JwtLoginDto> login(@RequestBody ReqLoginDto reqLoginDto, HttpServletResponse response) {
         String memberId = reqLoginDto.getLoginId();
         String password = reqLoginDto.getPassword();
 
@@ -42,6 +41,8 @@ public class LoginController {
         loginCookie.setMaxAge(60 * 60 * 24 * 30);
 
         header.add("Set-Cookie", loginCookie.toString());
+        header.add("Authorization", "Bearer "+jwtLoginDto.getAccessToken());
+        response.addCookie(loginCookie);
 
         return ResponseEntity.ok()
                 .headers(header)
