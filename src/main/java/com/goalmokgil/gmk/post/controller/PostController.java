@@ -34,8 +34,6 @@ public class PostController {
     private final PostService postService;
     private final LikeService likeService;
     private final TokenService tokenService;
-    private final String rootPath = System.getProperty("user.dir");
-    private final String postImgPath = rootPath + "/src/main/resources/static/postImg/";
 
     // 특정 게시글 조회
     // Post => PostDto
@@ -46,29 +44,6 @@ public class PostController {
         return ResponseEntity.ok(new PostDto(post));
     }
 
-    @GetMapping("/downloadImg/{imgName}")
-    public ResponseEntity<Resource> getImg(@PathVariable String imgName) {
-        log.info("download request img path: {}", imgName);
-        // 이미지 파일 경로 설정
-        Path filePath = Paths.get(postImgPath).resolve(imgName);
-
-        // 이미지 파일을 클라이언트에게 전송
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=" + imgName);
-
-        // MIME 타입 추측
-        String mimeType = guessMimeType(imgName);
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .contentLength(filePath.toFile().length())
-                .contentType(MediaType.parseMediaType(mimeType))
-                .body(new FileSystemResource(filePath.toFile()));
-    }
-    private String guessMimeType(String fileName) {
-        String contentType = URLConnection.guessContentTypeFromName(fileName);
-        return contentType != null ? contentType : "application/octet-stream";
-    }
 
     // 모든 게시글 조회
     // List<Post> => List<PostDto>
@@ -97,28 +72,6 @@ public class PostController {
         return ResponseEntity.ok(new PostDto(postService.createPost(userId, postDto)));
     }
 
-    @PostMapping("/uploadImg")
-    public ResponseEntity<String> uploadImg(@RequestParam("postImg") MultipartFile img) {
-        if (img.isEmpty()) {
-            return null;
-        }
-
-        String originalFileName = img.getOriginalFilename();
-        String storeFileName = UUID.randomUUID() + "." + extractExt(originalFileName);
-        String realFilePath = postImgPath + storeFileName;
-        log.info("upload request img path: {}", realFilePath);
-        try {
-            img.transferTo(new File(realFilePath));
-            return ResponseEntity.ok(realFilePath);
-        } catch (IOException e) {
-            throw new RuntimeException("사진 저장에 실패했습니다.");
-        }
-    }
-
-    private String extractExt(String originalFilename) {
-        int pos = originalFilename.lastIndexOf(".");
-        return originalFilename.substring(pos + 1);
-    }
 
     // 게시글 수정
     @PutMapping("/{postId}")
