@@ -26,6 +26,7 @@ import java.util.UUID;
 public class PostImgController {
     private final String rootPath = System.getProperty("user.dir");
     private final String postImgPath = rootPath + "/src/main/resources/static/postImg/";
+    private final String staticImgPath = "/static/postImg/";
 
     @PostMapping("/uploadImg")
     public ResponseEntity<String> uploadImg(@RequestParam("postImg") MultipartFile img) {
@@ -39,7 +40,7 @@ public class PostImgController {
         log.info("upload request img path: {}", realFilePath);
         try {
             img.transferTo(new File(realFilePath));
-            return ResponseEntity.ok(realFilePath);
+            return ResponseEntity.ok(staticImgPath + storeFileName);
         } catch (IOException e) {
             throw new RuntimeException("사진 저장에 실패했습니다.");
         }
@@ -58,11 +59,12 @@ public class PostImgController {
             }
             String originalFileName = img.getOriginalFilename();
             String storeFileName = UUID.randomUUID() + "." + extractExt(originalFileName);
+            log.info("store file name: {}", storeFileName);
             String realFilePath = postImgPath + storeFileName;
             log.info("upload request img path: {}", realFilePath);
             try {
                 img.transferTo(new File(realFilePath));
-                fileNames.add(realFilePath);
+                fileNames.add(staticImgPath+storeFileName);
             } catch (IOException e) {
                 throw new RuntimeException("사진 저장에 실패했습니다.");
             }
