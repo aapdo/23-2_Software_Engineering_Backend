@@ -53,6 +53,9 @@ public class PostImgController {
         ArrayList<String> fileNames = new ArrayList<>();
 
         for (MultipartFile img : imgFiles) {
+            if (img.getSize() == 0) {
+                throw new RuntimeException("사진 저장에 실패했습니다.");
+            }
             String originalFileName = img.getOriginalFilename();
             String storeFileName = UUID.randomUUID() + "." + extractExt(originalFileName);
             String realFilePath = postImgPath + storeFileName;
