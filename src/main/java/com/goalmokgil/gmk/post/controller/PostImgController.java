@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,7 +47,6 @@ public class PostImgController {
             throw new RuntimeException("사진 저장에 실패했습니다.");
         }
     }
-
    @PostMapping("/uploadImgList")
     public ResponseEntity<List<String>> uploadImgList(@RequestParam("postImgList") List<MultipartFile> imgFiles) {
         if (imgFiles.isEmpty()) {
