@@ -1,5 +1,6 @@
 package com.goalmokgil.gmk.post.controller;
 
+import com.goalmokgil.gmk.account.service.TokenService;
 import com.goalmokgil.gmk.post.dto.req.ReqLikeDto;
 import com.goalmokgil.gmk.post.service.LikeService;
 import lombok.RequiredArgsConstructor;
@@ -15,14 +16,17 @@ import java.util.Map;
 public class LikeController {
 
     private final LikeService likeService;
+    private final TokenService tokenService;
 
     @PostMapping
-    public ResponseEntity<?> addLike(@RequestBody ReqLikeDto reqLikeDto) {
-        boolean isLikedNow = likeService.addLike(reqLikeDto.getUserId(), reqLikeDto.getPostId());
+    public ResponseEntity<?> addLike(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long postId) {
+
+        Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);
+        boolean isLikedNow = likeService.addLike(userId, postId);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("userId", reqLikeDto.getUserId());
-        response.put("postId", reqLikeDto.getPostId());
+        response.put("userId", userId);
+        response.put("postId", postId);
         response.put("isLiked", isLikedNow);
 
         return ResponseEntity.ok(response);
