@@ -14,4 +14,5 @@ public class JwtLoginDto {
     private String grantType;
     private String accessToken;
     private String loginId;
+    private Long userId;
 }
