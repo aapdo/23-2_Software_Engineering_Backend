@@ -18,7 +18,7 @@ public class LikeController {
     private final LikeService likeService;
     private final TokenService tokenService;
 
-    @PostMapping
+    @GetMapping("/{postId}")
     public ResponseEntity<?> addLike(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long postId) {
 
         Long userId = tokenService.getCurrentUserIdByAuthorizationHeader(authorizationHeader);
